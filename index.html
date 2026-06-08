@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xelo AI</title>
+    <title>XeloAI</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,31 +12,39 @@
         <div class="chat-header">
             <div class="avatar">AI</div>
             <div>
-                <h2>Asystent AI</h2>
-                <p class="status">Online</p>
+                <h2>XeloChat AI</h2>
+                <p class="status" id="statusLabel">Online</p>
             </div>
         </div>
 
         <div class="chat-box" id="chatBox">
             <div class="message bot-message">
-                Cześć! Jestem Twoim inteligentnym asystentem. O czym chcesz porozmawiać?
+                Cześć! Jestem prawdziwym modelem AI. Możesz zapytać mnie o matematykę, poprosić o napisanie wiersza lub zadać dowolne pytanie. W czym mogę pomóc?
             </div>
         </div>
 
         <div class="input-area">
             <input type="text" id="userInput" placeholder="Napisz coś do AI..." onkeydown="if(event.key === 'Enter') sendMessage()">
-            <button onclick="sendMessage()">Wyślij</button>
+            <button id="sendBtn" onclick="sendMessage()">Wyślij</button>
         </div>
     </div>
 
     <script>
-        function sendMessage() {
+        // Używamy darmowego, otwartego modelu AI (Llama-3), który świetnie radzi sobie z różnymi pytaniami
+        const API_URL = "https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct";
+        
+        // Publiczny token darmowy do odpytywania modelu
+        const API_KEY = "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"; 
+
+        async function sendMessage() {
             const inputField = document.getElementById('userInput');
             const messageText = inputField.value.trim();
             
-            if (messageText === '') return; // Jeśli puste, nic nie rób
+            if (messageText === '') return;
 
             const chatBox = document.getElementById('chatBox');
+            const statusLabel = document.getElementById('statusLabel');
+            const sendBtn = document.getElementById('sendBtn');
 
             // 1. Dodaj wiadomość użytkownika do czatu
             const userMessageDiv = document.createElement('div');
@@ -44,42 +52,63 @@
             userMessageDiv.textContent = messageText;
             chatBox.appendChild(userMessageDiv);
 
-            // Czyszczenie pola wpisywania
             inputField.value = '';
-            
-            // Przewiń czat na dół
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // 2. Symulacja odpowiedzi AI po krótkiej chwili (1 sekunda)
-            setTimeout(() => {
-                const botMessageDiv = document.createElement('div');
-                botMessageDiv.className = 'message bot-message';
-                
-                // Generowanie odpowiedzi bota
-                botMessageDiv.textContent = getBotResponse(messageText);
-                
-                chatBox.appendChild(botMessageDiv);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 1000);
-        }
+            // Zmiana statusu na "Pisze..."
+            statusLabel.textContent = "AI pisze...";
+            statusLabel.style.color = "#eab308"; // żółty kolor
+            sendBtn.disabled = true;
 
-        // Prosta logika odpowiedzi naszego "AI"
-        function getBotResponse(userText) {
-            const text = userText.toLowerCase();
-            
-            if (text.includes('cześć') || text.includes('hej') || text.includes('siema')) {
-                return "Cześć! Miło Cię widzieć. Jak mogę Ci dzisiaj pomóc?";
-            } else if (text.includes('jak się masz') || text.includes('co tam')) {
-                return "Działam doskonale, dziękuję! Moje procesory pracują na pełnych obrotach. A u Ciebie?";
-            } else if (text.includes('kto cię stworzył') || text.includes('autor')) {
-                return "Zostałem stworzony przez młodego i zdolnego programistę na GitHubie!";
-            } else if (text.includes('pogoda')) {
-                return "Zawsze mam w sercu słońce, ale jeśli chcesz znać prawdziwą pogodę, wyjrzyj za okno! ☀️";
-            } else if (text.includes('pomoc') || text.includes('co potrafisz')) {
-                return "Potrafię odpowiadać na powitania, rozmawiać o moim twórcy i o samopoczuciu. Spróbuj napisać 'cześć' albo 'kto cię stworzył'!";
-            } else {
-                return "To bardzo ciekawe! Wciąż się uczę, więc nie wszystko jeszcze rozumiem, ale chętnie dowiem się więcej.";
+            // 2. Stworzenie elementu na odpowiedź bota (z animacją czekania)
+            const botMessageDiv = document.createElement('div');
+            botMessageDiv.className = 'message bot-message';
+            botMessageDiv.textContent = "Thinking...";
+            chatBox.appendChild(botMessageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                // Wywołanie prawdziwego modelu AI
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${API_KEY}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        inputs: `<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\nOdpowiedz krótko i zwięźle po polsku: ${messageText}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n`,
+                        parameters: {
+                            max_new_tokens: 250,
+                            temperature: 0.7
+                        }
+                    })
+                });
+
+                const data = await response.json();
+                
+                // Wyciąganie czystego tekstu odpowiedzi
+                let aiResponse = "";
+                if (data && data[0] && data[0].generated_text) {
+                    const fullText = data[0].generated_text;
+                    // Odcinamy prompt systemowy, żeby pokazać tylko czystą odpowiedź AI
+                    const parts = fullText.split("<|start_header_id|>assistant<|end_header_id|>\n\n");
+                    aiResponse = parts[parts.length - 1].trim();
+                } else {
+                    aiResponse = "Przepraszam, mam mały problem z przetworzeniem tego pytania. Spróbuj ponownie!";
+                }
+
+                botMessageDiv.textContent = aiResponse;
+
+            } catch (error) {
+                console.error(error);
+                botMessageDiv.textContent = "Nie udało mi się połączyć z serwerem AI. Sprawdź połączenie z internetem.";
             }
+
+            // Przywrócenie statusu Online
+            statusLabel.textContent = "Online";
+            statusLabel.style.color = "#22c55e"; // zielony kolor
+            sendBtn.disabled = false;
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
     </script>
 </body>
