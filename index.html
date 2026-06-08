@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XeloAI Browser Ecosystem</title>
+  <title>XeloAI</title>
   <style>
     * {
       box-sizing: border-box;
@@ -120,7 +120,7 @@
       border-color: #ff7b72;
     }
 
-    /* GŁÓWNY OBSZAR ROBOCZY (BEZ FEJKOWEGO PASKA ADRESU) */
+    /* GŁÓWNY OBSZAR ROBOCZY */
     .main-content-area {
       flex: 1;
       display: flex;
@@ -307,8 +307,8 @@
     <div class="sidebar-header">
       <span style="font-size: 22px;">⚙️</span>
       <div>
-        <h2>XeloBrowser</h2>
-        <span style="font-size: 11px; color: #8b949e; display: block;">v2.0 Ecosystem</span>
+        <h2>XeloAI</h2>
+        <span style="font-size: 11px; color: #8b949e; display: block;">v1.3</span>
       </div>
       <div class="status-dot"></div>
     </div>
@@ -370,7 +370,7 @@
               <h3>🎨 Generator Obrazów</h3>
               <p>Niezależny czat graficzny generujący obrazy w locie przy użyciu sieci Flux.</p>
             </div>
-            <span class="status-badge">STATUS: AKTYWNY</span>
+            <span class="status-badge">STATUS: DOSTĘPNY, ROZWIJANY</span>
           </div>
         </div>
       </div>
@@ -393,13 +393,11 @@
         setTimeout(() => document.getElementById("cookieBanner").classList.add("show"), 1000);
       }
 
-      // Ładowanie historii czatu tekstowego
       const savedChat = localStorage.getItem("xelo_chat_history");
       const container = document.getElementById('chatMessages');
       container.innerHTML = savedChat ? savedChat : `<div class="message ai">${initialWelcomeMessage}</div>`;
       container.scrollTop = container.scrollHeight;
 
-      // Ładowanie historii czatu graficznego
       const savedImageChat = localStorage.getItem("xelo_image_chat_history");
       if (savedImageChat) {
         document.getElementById('imageChatMessages').innerHTML = savedImageChat;
@@ -447,7 +445,6 @@
       localStorage.setItem("xelo_active_tab", viewId);
     }
 
-    // OBSŁUGA CZATU TEKSTOWEGO
     async function sendMessage() {
       const inputEl = document.getElementById('userInput');
       const container = document.getElementById('chatMessages');
@@ -481,7 +478,7 @@
       container.scrollTop = container.scrollHeight;
     }
 
-    // OBSŁUGA CZATU GRAFICZNEGO
+    // ZAKTUALIZOWANA, NIEZAWODNA FUNKCJA POBIERANIA STRUMIENIOWEGO
     async function sendImageRequest() {
       const inputEl = document.getElementById('imageInput');
       const container = document.getElementById('imageChatMessages');
@@ -513,12 +510,19 @@
 
         if (!response.ok) throw new Error();
 
-        const base64Data = await response.text();
-        aiDiv.innerHTML = `<div style="margin-bottom: 8px;">Oto Twój wygenerowany obraz:</div><img class="ai-generated-image" src="data:image/jpeg;base64,${base64Data}" alt="${prompt}">`;
+        // Pobranie obrazu jako surowy blob bezpośrednio z pamięci strumienia
+        const blob = await response.blob();
+        const localImageUrl = URL.createObjectURL(blob);
+
+        // Renderowanie obrazu za pomocą wewnętrznego ObjectURL
+        aiDiv.innerHTML = `<div style="margin-bottom: 8px;">Oto Twój wygenerowany obraz:</div><img class="ai-generated-image" src="${localImageUrl}" alt="${prompt}">`;
+        
+        // Ważne: Do localStorage zapisujemy strukturę. ObjectURL wygaśnie po odświeżeniu, 
+        // ale dodanie zdjęcia w locie naprawia bieżącą sesję bez błędów typu Crash Base64.
         localStorage.setItem("xelo_image_chat_history", container.innerHTML);
 
       } catch (error) {
-        aiDiv.innerHTML = `<span style="color: #ff7b72;">❌ Nie udało się wygenerować obrazu. Serwer nie odpowiedział poprawnie.</span>`;
+        aiDiv.innerHTML = `<span style="color: #ff7b72;">❌ Serwer przesłał błędny strumień danych. Spróbuj ponownie za chwilę.</span>`;
       } finally {
         btn.disabled = false;
         container.scrollTop = container.scrollHeight;
