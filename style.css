@@ -1,94 +1,181 @@
+/* Reset styli */
 * {
-    margin: 0; padding: 0; box-sizing: border-box;
-    font-family: 'Inter', -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+/* Ciemne tło całej strony */
 body {
-    background-color: #050505;
-    display: flex; justify-content: center; align-items: center;
-    height: 100vh; color: #fff;
+    background-color: #0b0b0b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #ffffff;
 }
 
+/* Okno czatu - czarny motyw z pomarańczową obwódką */
 .chat-container {
-    width: 100%; max-width: 450px; height: 85vh;
-    background-color: #0a0a0a;
-    border-radius: 24px;
-    display: flex; flex-direction: column;
-    border: 1px solid #222;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    width: 100%;
+    max-width: 460px;
+    height: 85vh;
+    background-color: #121212;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #262626;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
     overflow: hidden;
 }
 
+/* Górny pasek */
 .chat-header {
-    padding: 20px; background: #111;
-    display: flex; align-items: center; gap: 15px;
-    border-bottom: 1px solid #222;
+    padding: 18px 20px;
+    background-color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid #262626;
 }
 
-.avatar {
-    width: 45px; height: 45px;
-    background: linear-gradient(135deg, #ff6a00, #ff8c00);
-    border-radius: 14px;
-    display: flex; justify-content: center; align-items: center;
-    font-weight: bold; color: #000;
+/* Słynny pomarańczowy kwadracik z XeloBrowser */
+.orange-box {
+    width: 20px;
+    height: 20px;
+    background-color: #ff6a00;
+    border-radius: 4px;
 }
 
-.chat-header h2 { font-size: 18px; color: #ff6a00; }
+.chat-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
 
 .powered-by {
-    font-size: 11px; color: #666; text-transform: lowercase;
+    font-size: 11px;
+    color: #737373;
+    text-transform: lowercase;
+    margin-top: 2px;
 }
 
+/* Kropka statusu */
 .status-dot {
-    width: 10px; height: 10px; background: #22c55e;
-    border-radius: 50%; margin-left: auto;
+    width: 8px;
+    height: 8px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    margin-left: auto;
 }
 
 .status-dot.typing {
-    background: #ff6a00;
-    animation: pulse 1s infinite;
+    background-color: #ff6a00;
+    animation: blink 1s infinite;
 }
 
-@keyframes pulse {
-    0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; }
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
 }
 
+/* Kontener na wiadomości */
 .chat-box {
-    flex: 1; padding: 20px; overflow-y: auto;
-    display: flex; flex-direction: column; gap: 15px;
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background-color: #121212;
 }
 
+/* Styl wiadomości */
 .message {
-    max-width: 80%; padding: 14px 18px; font-size: 14px; line-height: 1.5;
+    max-width: 80%;
+    padding: 12px 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    border-radius: 12px;
 }
 
+/* Wiadomość bota - ciemnoszara */
 .bot-message {
-    background: #1a1a1a; color: #eee;
-    align-self: flex-start; border-radius: 18px 18px 18px 4px;
+    background-color: #1a1a1a;
+    color: #e5e5e5;
+    align-self: flex-start;
+    border: 1px solid #262626;
 }
 
+/* Wiadomość użytkownika - pomarańczowa z czarnym tekstem */
 .user-message {
-    background: #ff6a00; color: #000; font-weight: 500;
-    align-self: flex-end; border-radius: 18px 18px 4px 18px;
+    background-color: #ff6a00;
+    color: #000000;
+    font-weight: 500;
+    align-self: flex-end;
 }
 
+/* Dolny panel wpisywania */
 .input-area {
-    padding: 20px; background: #111; display: flex; gap: 10px;
+    padding: 16px 20px;
+    background-color: #1a1a1a;
+    display: flex;
+    gap: 12px;
+    border-top: 1px solid #262626;
 }
 
+/* Pole tekstowe */
 input {
-    flex: 1; padding: 14px; border-radius: 12px;
-    border: 1px solid #333; background: #050505;
-    color: #fff; outline: none;
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #262626;
+    background-color: #121212;
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
 }
 
-input:focus { border-color: #ff6a00; }
+input:focus {
+    border-color: #ff6a00;
+}
 
+/* Pomarańczowy przycisk */
 button {
-    padding: 0 20px; background: #ff6a00; color: #000;
-    border: none; border-radius: 12px; font-weight: bold;
-    cursor: pointer; transition: 0.2s;
+    padding: 0 22px;
+    background-color: #ff6a00;
+    color: #000000;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
 }
 
-button:hover { background: #ff8c00; transform: scale(1.02); }
-button:disabled { background: #333; cursor: not-allowed; }
+button:hover {
+    background-color: #ff8533;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+button:disabled {
+    background-color: #262626;
+    color: #737373;
+    cursor: not-allowed;
+}
+
+/* Styl paska przewijania czatu */
+.chat-box::-webkit-scrollbar {
+    width: 6px;
+}
+.chat-box::-webkit-scrollbar-thumb {
+    background-color: #262626;
+    border-radius: 3px;
+}
