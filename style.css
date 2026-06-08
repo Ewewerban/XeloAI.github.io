@@ -1,0 +1,138 @@
+/* Reset podstawowych styli */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Tło całej strony */
+body {
+    background: linear-gradient(135deg, #0f172a, #1e1b4b);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #f8fafc;
+}
+
+/* Główne okno czatu */
+.chat-container {
+    width: 100%;
+    max-width: 450px;
+    height: 80vh;
+    background-color: #1e293b;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #334155;
+}
+
+/* Górny pasek */
+.chat-header {
+    background-color: #0f172a;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid #334155;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.chat-header h2 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.status {
+    font-size: 12px;
+    color: #22c55e;
+}
+
+/* Obszar z wiadomościami */
+.chat-box {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Wspólny styl dla wiadomości */
+.message {
+    max-width: 75%;
+    padding: 12px 16px;
+    border-radius: 15px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+/* Wiadomość od AI */
+.bot-message {
+    background-color: #334155;
+    color: #f8fafc;
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+}
+
+/* Wiadomość od użytkownika */
+.user-message {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 5px;
+}
+
+/* Dolny panel wpisywania */
+.input-area {
+    padding: 15px;
+    background-color: #0f172a;
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid #334155;
+}
+
+.input-area input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #334155;
+    background-color: #1e293b;
+    color: white;
+    font-size: 14px;
+    outline: none;
+}
+
+.input-area input:focus {
+    border-color: #6366f1;
+}
+
+.input-area button {
+    padding: 0 20px;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.input-area button:hover {
+    opacity: 0.9;
+}
