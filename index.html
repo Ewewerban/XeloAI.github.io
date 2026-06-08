@@ -174,12 +174,12 @@
       align-self: flex-end;
     }
 
-    /* Dynamicznie wygenerowany obraz wewnątrz czatu */
+    /* Wygenerowany obraz wewnątrz czatu */
     .ai-generated-image {
       max-width: 100%;
-      max-height: 400px;
+      max-height: 450px;
       border-radius: 8px;
-      margin-top: 10px;
+      margin-top: 12px;
       border: 1px solid #30363d;
       display: block;
     }
@@ -344,12 +344,12 @@
       <div class="chat-container">
         <div class="chat-messages" id="imageChatMessages">
           <div class="message ai">
-            Witaj w dedykowanym czacie graficznym! Wpisz poniżej opis obrazu, który chcesz wygenerować za pomocą modelu **Imagen 3**, a grafika pojawi się bezpośrednio w tym oknie czatu.
+            Witaj w dedykowanym czacie graficznym! Wpisz poniżej opis obrazu, który chcesz wygenerować, a grafika zostanie wklejona bezpośrednio do historii tej rozmowy.
           </div>
         </div>
         <div class="chat-input-area">
           <div class="input-wrapper">
-            <input type="text" id="imageInput" placeholder="Opisz obraz (np. 'cyberpunk cat, neon lights, 8k')...">
+            <input type="text" id="imageInput" placeholder="Opisz obraz (np. 'kot astronauta na księżycu, styl cyfrowy')...">
             <button id="imageSendBtn" onclick="sendImageRequest()">Generuj obraz</button>
           </div>
         </div>
@@ -363,14 +363,14 @@
           <div class="equal-card">
             <div>
               <h3>🤖 Inteligentny Czat AI</h3>
-              <p>Pełnoekranowe centrum dowodzenia zintegrowane z bezserwerowym silnikiem Gemini 2.5 Flash.</p>
+              <p>Zintegrowany z silnikiem Gemini 2.5 Flash. Odpowiada na pytania i analizuje dane.</p>
             </div>
             <span class="status-badge">STATUS: AKTYWNY</span>
           </div>
           <div class="equal-card">
             <div>
               <h3>🎨 Generator Obrazów</h3>
-              <p>Czat graficzny generujący obrazy w locie przy użyciu sieci neuronowej Google Imagen 3.</p>
+              <p>Niezależny czat graficzny generujący obrazy w locie przy użyciu sieci Flux.</p>
             </div>
             <span class="status-badge">STATUS: AKTYWNY</span>
           </div>
@@ -381,14 +381,14 @@
 
   <div id="cookieBanner" class="cookie-banner">
     <div class="cookie-text">
-      🍪 <strong>Używamy plików cookies i pamięci lokalnej (localStorage).</strong> Zapisujemy Twoją historię rozmów tekstowych oraz wygenerowanych obrazów na Twoim urządzeniu.
+      🍪 <strong>Używamy pamięci lokalnej (localStorage).</strong> Zapisujemy historię tekstów oraz wygenerowanych obrazów na Twoim urządzeniu.
     </div>
     <button class="cookie-btn" onclick="acceptCookies()">Akceptuję</button>
   </div>
 
   <script>
     const serverUrl = 'https://ewewerbanEwewerban--60e9fcc8633011f1b4d31607ee4eb77e.web.val.run';
-    const initialWelcomeMessage = `Witaj w panelu Xelo AI! Silnik w pełni wspiera teraz formatowanie Markdown. Twoja historia rozmów jest bezpiecznie zapisywana na tym urządzeniu. W czym mogę pomóc?`;
+    const initialWelcomeMessage = `Witaj w zaktualizowanym panelu Xelo AI! Silnik został zaktualizowany do stabilnej architektury Gemini 2.5 Flash. W czym mogę pomóc?`;
 
     document.addEventListener("DOMContentLoaded", () => {
       if (!localStorage.getItem("xelo_cookies_accepted")) {
@@ -423,7 +423,7 @@
         localStorage.removeItem("xelo_chat_history");
         localStorage.removeItem("xelo_image_chat_history");
         document.getElementById('chatMessages').innerHTML = `<div class="message ai">${initialWelcomeMessage}</div>`;
-        document.getElementById('imageChatMessages').innerHTML = `<div class="message ai">Witaj w dedykowanym czacie graficznym! Wpisz poniżej opis obrazu, który chcesz wygenerować za pomocą modelu **Imagen 3**, a grafika pojawi się bezpośrednio w tym oknie czatu.</div>`;
+        document.getElementById('imageChatMessages').innerHTML = `<div class="message ai">Witaj w dedykowanym czacie graficznym! Wpisz poniżej opis obrazu, który chcesz wygenerować, a grafika zostanie wklejona bezpośrednio do historii tej rozmowy.</div>`;
       }
     }
 
@@ -486,7 +486,7 @@
       container.scrollTop = container.scrollHeight;
     }
 
-    // OBSŁUGA CZATU GRAFICZNEGO (NOWOŚĆ - GENEROWANIE W LIŚCIE WIADOMOŚCI)
+    // OBSŁUGA CZATU GRAFICZNEGO (BEZPOŚREDNIO W DYMKU)
     async function sendImageRequest() {
       const inputEl = document.getElementById('imageInput');
       const container = document.getElementById('imageChatMessages');
@@ -495,21 +495,20 @@
 
       const btn = document.getElementById('imageSendBtn');
 
-      // 1. Dodaj prompt użytkownika do czatu graficznego
+      // Dodaj prompt do okna czatu
       const userDiv = document.createElement('div');
       userDiv.className = 'message user';
       userDiv.textContent = prompt;
       container.appendChild(userDiv);
       inputEl.value = '';
 
-      // 2. Dodaj dymek oczekiwania AI
+      // Dodaj dymek oczekiwania
       const aiDiv = document.createElement('div');
       aiDiv.className = 'message ai';
-      aiDiv.innerHTML = `🎨 <em>Generuję obraz dla: "${prompt}"... (może to zająć chwilę)</em>`;
+      aiDiv.innerHTML = `🎨 <em>Generuję obraz dla: "${prompt}"... Proszę czekać...</em>`;
       container.appendChild(aiDiv);
       container.scrollTop = container.scrollHeight;
 
-      // Zablokuj przycisk na czas generowania
       btn.disabled = true;
 
       try {
@@ -523,21 +522,21 @@
 
         const base64Data = await response.text();
 
-        // 3. Po odebraniu Base64 podmień zawartość dymka na tag <img>
-        aiDiv.innerHTML = `<div>Oto Twój wygenerowany obraz:</div><img class="ai-generated-image" src="data:image/jpeg;base64,${base64Data}" alt="Generated Image">`;
+        // Podmień status ładowania na gotowy element IMG
+        aiDiv.innerHTML = `<div style="margin-bottom: 8px;">Oto Twój wygenerowany obraz:</div><img class="ai-generated-image" src="data:image/jpeg;base64,${base64Data}" alt="${prompt}">`;
         
-        // Zapisz stan czatu graficznego w localStorage (wraz ze zdjęciami w base64!)
+        // Zapisz zaktualizowaną strukturę czatu graficznego w localStorage
         localStorage.setItem("xelo_image_chat_history", container.innerHTML);
 
       } catch (error) {
-        aiDiv.textContent = '❌ Nie udało się wygenerować obrazu. Sprawdź konfigurację API.';
+        aiDiv.innerHTML = `<span style="color: #ff7b72;">❌ Nie udało się wygenerować obrazu. Serwer nie odpowiedział poprawnie.</span>`;
       } finally {
         btn.disabled = false;
         container.scrollTop = container.scrollHeight;
       }
     }
 
-    // Słuchacze klawisza Enter dla obu pól tekstowych
+    // Obsługa kliknięcia klawisza Enter
     document.getElementById('userInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
     document.getElementById('imageInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') sendImageRequest(); });
   </script>
