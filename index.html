@@ -23,7 +23,7 @@
 
         <div class="chat-box" id="chatBox">
             <div class="message bot-message">
-                Witaj w Xelo AI! Bezpieczne i stabilne połączenie z serwerem zostało pomyślnie ustanowione. O co chcesz mnie zapytać?
+                Witaj w Xelo AI! Bezpieczna, uproszczona architektura tekstowa została pomyślnie wdrożona. Serwer działa bez limitów i kolejek. O co chcesz zapytać?
             </div>
         </div>
 
@@ -34,7 +34,7 @@
     </div>
 
     <script>
-        // Twój unikalny i działający adres URL serwera na Val Town
+        // Twój bezpośredni URL serwera na platformie Val Town
         const MY_SERVER_URL = "https://ewewerbanEwewerban--60e9fcc8633011f1b4d31607ee4eb77e.web.val.run";
 
         async function sendMessage() {
@@ -46,7 +46,7 @@
             const statusDot = document.getElementById('statusDot');
             const sendBtn = document.getElementById('sendBtn');
 
-            // 1. Dodanie wiadomości użytkownika do okna czatu
+            // Pokazanie wiadomości użytkownika
             const userDiv = document.createElement('div');
             userDiv.className = 'message user-message';
             userDiv.textContent = messageText;
@@ -54,7 +54,7 @@
             inputField.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // 2. Aktywacja wskaźnika myślenia bota i zablokowanie przycisku
+            // Start animacji myślenia bota
             statusDot.classList.add('typing');
             sendBtn.disabled = true;
 
@@ -65,7 +65,7 @@
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                // Wysyłanie wiadomości jako czysty tekst bezpośrednio do serwera Val Town
+                // Wysyłamy dane jako czysty tekst bez struktur obiektowych JSON
                 const response = await fetch(MY_SERVER_URL, {
                     method: "POST",
                     headers: {
@@ -75,16 +75,14 @@
                 });
 
                 const replyText = await response.text();
-                
-                // Wyświetlenie odpowiedzi zwróconej przez model AI
                 botDiv.textContent = replyText;
 
             } catch (e) {
                 console.error(e);
-                botDiv.textContent = "Wystąpił błąd podczas próby komunikacji z serwerem. Upewnij się, że zmiany w Val Town zostały zapisane.";
+                botDiv.textContent = "Wystąpił błąd komunikacji. Sprawdź stan serwera.";
             }
 
-            // 3. Przywrócenie interfejsu do stanu gotowości
+            // Przywrócenie interfejsu
             statusDot.classList.remove('typing');
             sendBtn.disabled = false;
             chatBox.scrollTop = chatBox.scrollHeight;
