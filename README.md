@@ -32,30 +32,28 @@
 
 Poniżej znajdziesz najnowsze informacje dotyczące rozwoju projektu XeloAI oraz ekosystemu XeloBrowser.
 
-> [!NOTE]
-> ### 🚀 Migracja na Google Gemini zakończona!
-> ![Status](https://img.shields.io/badge/Status-Aktywne-orange?style=flat-square)  
-> Serwer Node na platformie Val Town został pomyślnie przepisany na bezpośrednią obsługę modeli **Gemini 1.5 Flash**. Dzięki temu czat zyskał pełną stabilność, natychmiastowy czas odpowiedzi oraz całkowitą odporność na limity IP.
-> 
-> 📅 *Czerwiec 2026*
+### 🚀 Migracja na Google Gemini zakończona!
+* **Status:** ![Status](https://img.shields.io/badge/Status-Aktywne-orange?style=flat-square)
+* **Opis:** Serwer Node na platformie Val Town został pomyślnie przepisany na bezpośrednią obsługę modeli **Gemini 1.5 Flash**. Dzięki temu czat zyskał pełną stabilność, natychmiastowy czas odpowiedzi oraz całkowitą odporność na limity IP.
+* **Data:** 📅 *Czerwiec 2026*
 
-> [!TIP]
-> ### ✨ Nowa architektura tekstowa
-> ![Wdrożenie](https://img.shields.io/badge/Wdrożenie-Front--end-blue?style=flat-square)  
-> Front-end aplikacji działający na **GitHub Pages** przeszedł gruntowne uproszczenie kodu. Przesyłanie surowego strumienia tekstu (Plain Text) całkowicie wyeliminowało problemy z CORS i błędy formatowania obiektów.
-> 
-> 📅 *Czerwiec 2026*
+---
 
-> [!IMPORTANT]
-> ### ⚙️ Integracja z ekosystemem XeloBrowser
-> ![Plany](https://img.shields.io/badge/Plany-XeloBrowser-purple?style=flat-square)  
-> Rozpoczynamy prace nad głębszą integracją asystenta XeloAI bezpośrednio z silnikiem przeglądarki XeloBrowser. W planach jest stworzenie dedykowanego bocznego panelu (sidebar) oraz automatyczne podsumowywanie czytanych witryn.
-> 
-> 📅 *Wkrótce*
+### ✨ Nowa architektura tekstowa
+* **Status:** ![Wdrożenie](https://img.shields.io/badge/Wdrożenie-Front--end-blue?style=flat-square)
+* **Opis:** Front-end aplikacji działający na **GitHub Pages** przeszedł gruntowne uproszczenie kodu. Przesyłanie surowego strumienia tekstu (Plain Text) całkowicie wyeliminowało problemy z CORS i błędy formatowania obiektów.
+* **Data:** 📅 *Czerwiec 2026*
 
-> [!WARNING]
-> ### 🤝 Zapraszamy do współtworzenia
-> ![Społeczność](https://img.shields.io/badge/Społeczność-Open--Source-green?style=flat-square)  
-> Projekt staje się otwarty na kontrybucje społeczności! Jeśli masz pomysł na ulepszenie wyglądu czatu, optymalizację kodu w Val Town lub nowe funkcjonalności – śmiało zgłoś Pull Request lub Issue.
-> 
-> 📅 *Stałe*
+---
+
+### ⚙️ Integracja z ekosystemem XeloBrowser
+* **Status:** ![Plany](https://img.shields.io/badge/Plany-XeloBrowser-purple?style=flat-square)
+* **Opis:** Rozpoczynamy prace nad głębszą integracją asystenta XeloAI bezpośrednio z silnikiem przeglądarki XeloBrowser. W planach jest stworzenie dedykowanego bocznego panelu (sidebar) oraz automatyczne podsumowywanie czytanych witryn.
+* **Data:** 📅 *Wkrótce*
+
+---
+
+### 🤝 Zapraszamy do współtworzenia
+* **Status:** ![Społeczność](https://img.shields.io/badge/Społeczność-Open--Source-green?style=flat-square)
+* **Opis:** Projekt staje się otwarty na kontrybucje społeczności! Jeśli masz pomysł na ulepszenie wyglądu czatu, optymalizację kodu w Val Town lub nowe funkcjonalności – śmiało zgłoś Pull Request lub Issue.
+* **Data:** 📅 *Stałe*
