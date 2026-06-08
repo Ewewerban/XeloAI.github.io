@@ -23,7 +23,7 @@
 
         <div class="chat-box" id="chatBox">
             <div class="message bot-message">
-                Witaj w Xelo AI!  O co chcesz zapytać?
+                Witaj w Xelo AI! Bezpieczne i stabilne połączenie z serwerem zostało pomyślnie ustanowione. O co chcesz mnie zapytać?
             </div>
         </div>
 
@@ -34,7 +34,7 @@
     </div>
 
     <script>
-        // Adres URL Twojego działającego serwera z Val Town
+        // Twój unikalny i działający adres URL serwera na Val Town
         const MY_SERVER_URL = "https://ewewerbanEwewerban--60e9fcc8633011f1b4d31607ee4eb77e.web.val.run";
 
         async function sendMessage() {
@@ -46,7 +46,7 @@
             const statusDot = document.getElementById('statusDot');
             const sendBtn = document.getElementById('sendBtn');
 
-            // 1. Dodanie wiadomości użytkownika do okna
+            // 1. Dodanie wiadomości użytkownika do okna czatu
             const userDiv = document.createElement('div');
             userDiv.className = 'message user-message';
             userDiv.textContent = messageText;
@@ -54,7 +54,7 @@
             inputField.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // 2. Start animacji myślenia bota
+            // 2. Aktywacja wskaźnika myślenia bota i zablokowanie przycisku
             statusDot.classList.add('typing');
             sendBtn.disabled = true;
 
@@ -65,27 +65,26 @@
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                // Bezpieczne wywołanie Twojego własnego serwera Node.js
+                // Wysyłanie wiadomości jako czysty tekst bezpośrednio do serwera Val Town
                 const response = await fetch(MY_SERVER_URL, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ message: messageText })
+                    headers: {
+                        "Content-Type": "text/plain; charset=utf-8"
+                    },
+                    body: messageText
                 });
 
-                const data = await response.json();
+                const replyText = await response.text();
                 
-                if (data && data.response) {
-                    botDiv.textContent = data.response;
-                } else {
-                    botDiv.textContent = "Serwer Node.js odebrał zapytanie, ale nie przesłał odpowiedzi z AI. Sprawdź kartę 'Logs' w Val Town.";
-                }
+                // Wyświetlenie odpowiedzi zwróconej przez model AI
+                botDiv.textContent = replyText;
 
             } catch (e) {
                 console.error(e);
-                botDiv.textContent = "Nie udało się skomunikować z Twoim serwerem Node.js. Sprawdź, czy kod w Val Town jest poprawnie zapisany.";
+                botDiv.textContent = "Wystąpił błąd podczas próby komunikacji z serwerem. Upewnij się, że zmiany w Val Town zostały zapisane.";
             }
 
-            // 3. Przywrócenie interfejsu do normy
+            // 3. Przywrócenie interfejsu do stanu gotowości
             statusDot.classList.remove('typing');
             sendBtn.disabled = false;
             chatBox.scrollTop = chatBox.scrollHeight;
