@@ -144,14 +144,14 @@
 
     /* KONTENERY NA ZAWARTOŚĆ W DUŻYM POLU */
     .viewport-content {
-      display: none; /* Domyślnie ukryte */
+      display: none;
       flex: 1;
       flex-direction: column;
       overflow: hidden;
     }
 
     .viewport-content.active {
-      display: flex; /* Pokazywane, gdy klasa jest aktywna */
+      display: flex;
     }
 
     /* POTĘŻNY, DUŻY CZAT Z AI */
@@ -339,26 +339,22 @@
   </div>
 
   <script>
-    // 1. NAPRAWIONE PRZEŁĄCZANIE ZAKŁADEK
+    // Przełączanie widoków w dużym polu
     function switchView(viewId, buttonEl) {
-      // Ukryj wszystkie widoki
       document.querySelectorAll('.viewport-content').forEach(view => {
         view.classList.remove('active');
       });
       
-      // Dezaktywuj wszystkie przyciski w menu
       document.querySelectorAll('.menu-button').forEach(btn => {
         btn.classList.remove('active');
       });
       
-      // Pokaż wybrany widok i nadaj aktywność przyciskowi
       const targetView = document.getElementById(viewId);
       if (targetView) {
         targetView.classList.add('active');
       }
       buttonEl.classList.add('active');
 
-      // Aktualizacja paska adresu URL
       const urlBar = document.getElementById('browserUrl');
       if (viewId === 'chatView') {
         urlBar.textContent = 'https://xelobrowser.ecosystem/chat-ai';
@@ -367,7 +363,7 @@
       }
     }
 
-    // 2. OBSŁUGA WYSYŁANIA WIADOMOŚCI
+    // Obsługa wysyłania wiadomości tekstowych do serwera
     async function sendMessage() {
       const inputEl = document.getElementById('userInput');
       const messagesContainer = document.getElementById('chatMessages');
@@ -375,7 +371,7 @@
 
       if (!text) return;
 
-      // Dodanie wiadomości użytkownika do czatu
+      // Dodanie wiadomości użytkownika
       const userDiv = document.createElement('div');
       userDiv.className = 'message user';
       userDiv.textContent = text;
@@ -384,7 +380,7 @@
       inputEl.value = '';
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-      // Wiadomość oczekiwania dla AI
+      // Wiadomość oczekiwania na AI
       const aiDiv = document.createElement('div');
       aiDiv.className = 'message ai';
       aiDiv.textContent = 'XeloAI generuje odpowiedź...';
@@ -410,7 +406,6 @@
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
-    // Podpięcie zdarzeń kliknięcia i kliknięcia Enter
     document.getElementById('sendBtn').addEventListener('click', sendMessage);
     document.getElementById('userInput').addEventListener('keydown', function(event) {
       if (event.key === 'Enter') {
@@ -420,4 +415,3 @@
   </script>
 </body>
 </html>
-
