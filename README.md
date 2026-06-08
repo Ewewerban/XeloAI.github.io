@@ -26,7 +26,7 @@
 + 📱 Fully Responsive – flawlessly scales and adapts to smartphones, tablets, and desktop computers.
 + 🚀 GitHub Pages Ready – fully optimized to be deployed and hosted for free, running 100% serverless.
 
-## 📰 Aktualności 
+## 📰 Aktualności (News)
 
 Poniżej znajdziesz najnowsze informacje dotyczące rozwoju projektu XeloAI oraz ekosystemu XeloBrowser.
 
@@ -36,9 +36,9 @@ Poniżej znajdziesz najnowsze informacje dotyczące rozwoju projektu XeloAI oraz
       <p align="center">
         <img src="https://img.shields.io/badge/Status-Aktywne-orange?style=for-the-badge" alt="Status">
       </p>
-      <h3>TYTUŁ</h3>
+      <h3>🚀 Migracja na Google Gemini zakończona!</h3>
       <p style="font-size: 14px; color: #8b949e;">
-       Jakiś tam tekst, bla bla bla
+        Serwer Node na platformie Val Town został pomyślnie przepisany na bezpośrednią obsługę modeli <strong>Gemini 1.5 Flash</strong>. Dzięki temu czat zyskał pełną stabilność, natychmiastowy czas odpowiedzi oraz odporność na limity IP.
       </p>
       <hr style="border: 0; border-top: 1px solid #21262d; margin: 12px 0;">
       <p style="font-size: 12px; color: #58a6ff;">📅 <i>Czerwiec 2026</i></p>
@@ -47,11 +47,22 @@ Poniżej znajdziesz najnowsze informacje dotyczące rozwoju projektu XeloAI oraz
       <p align="center">
         <img src="https://img.shields.io/badge/Wdrożenie-Front--end-blue?style=for-the-badge" alt="Wdrożenie">
       </p>
-
-
+      <h3>✨ Nowa architektura tekstowa</h3>
+      <p style="font-size: 14px; color: #8b949e;">
+        Front-end aplikacji działający na <strong>GitHub Pages</strong> przeszedł gruntowne uproszczenie kodu. Przesyłanie surowego strumienia tekstu (Plain Text) całkowicie wyeliminowało problemy z CORS i błędy formatowania obiektów.
+      </p>
+      <hr style="border: 0; border-top: 1px solid #21262d; margin: 12px 0;">
+      <p style="font-size: 12px; color: #58a6ff;">📅 <i>Czerwiec 2026</i></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top" style="border: 1px solid #30363d; border-radius: 6px; padding: 16px; background-color: #0d1117;">
+      <p align="center">
+        <img src="https://img.shields.io/badge/Plany-XeloBrowser-purple?style=for-the-badge" alt="Plany">
+      </p>
       <h3>⚙️ Integracja z ekosystemem</h3>
       <p style="font-size: 14px; color: #8b949e;">
-        Rozpoczynamy prace nad głębszą integracją asystenta XeloAI bezpośrednio z silnikiem przeglądarki XeloBrowser. W planach jest stworzenie bocznego panelu (sidebar), automatyczne podsumowywanie czytanych artykułów oraz inteligentne zarządzanie kartami za pomocą komend głosowych.
+        Rozpoczynamy prace nad głębszą integracją asystenta XeloAI bezpośrednio z silnikiem przeglądarki XeloBrowser. W planach jest stworzenie bocznego panelu (sidebar) oraz automatyczne podsumowywanie czytanych witryn.
       </p>
       <hr style="border: 0; border-top: 1px solid #21262d; margin: 12px 0;">
       <p style="font-size: 12px; color: #58a6ff;">📅 <i>Wkrótce</i></p>
@@ -62,7 +73,7 @@ Poniżej znajdziesz najnowsze informacje dotyczące rozwoju projektu XeloAI oraz
       </p>
       <h3>🤝 Zapraszamy do współtworzenia</h3>
       <p style="font-size: 14px; color: #8b949e;">
-        Projekt staje się w pełni otwarty na kontrybucje społeczności! Jeśli masz pomysł na ulepszenie wyglądu kafelków, optymalizację kodu serwerowego w Val Town lub chcesz dodać nowe funkcjonalności do asystenta – stwórz Pull Request lub zgłoś sugestię w sekcji Issues.
+        Projekt staje się otwarty na kontrybucje społeczności! Jeśli masz pomysł na ulepszenie wyglądu czatu, optymalizację kodu w Val Town lub nowe funkcjonalności – śmiało zgłoś Pull Request lub Issue.
       </p>
       <hr style="border: 0; border-top: 1px solid #21262d; margin: 12px 0;">
       <p style="font-size: 12px; color: #58a6ff;">📅 <i>Stałe</i></p>
