@@ -59,6 +59,7 @@
       flex-direction: column;
       padding: 12px;
       gap: 6px;
+      flex: 1;
     }
 
     .menu-button {
@@ -90,39 +91,42 @@
       font-weight: 600;
     }
 
-    /* GŁÓWNY OBSZAR ROBOCZY */
+    .sidebar-footer {
+      padding: 12px;
+      border-top: 1px solid #21262d;
+      background-color: #161b22;
+    }
+
+    .clear-btn {
+      background-color: #21262d;
+      color: #ff7b72;
+      border: 1px solid #30363d;
+      padding: 10px;
+      width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .clear-btn:hover {
+      background-color: #8c2323;
+      color: #ffffff;
+      border-color: #ff7b72;
+    }
+
+    /* GŁÓWNY OBSZAR ROBOCZY (BEZ FEJKOWEGO PASKA ADRESU) */
     .main-content-area {
       flex: 1;
       display: flex;
       flex-direction: column;
       background-color: #000000;
       position: relative;
-    }
-
-    .browser-navbar {
-      background-color: #161b22;
-      padding: 12px 20px;
-      border-bottom: 1px solid #21262d;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .browser-controls {
-      display: flex;
-      gap: 12px;
-      color: #8b949e;
-      font-size: 14px;
-    }
-
-    .browser-search-bar {
-      flex: 1;
-      background-color: #0d1117;
-      border-radius: 6px;
-      padding: 8px 16px;
-      font-size: 13.5px;
-      color: #8b949e;
-      border: 1px solid #21262d;
     }
 
     .viewport-content {
@@ -136,7 +140,7 @@
       display: flex;
     }
 
-    /* UNIWERSALNE STRUKTURY CZATÓW */
+    /* STRUKTURY CZATÓW */
     .chat-container {
       display: flex;
       flex-direction: column;
@@ -174,7 +178,6 @@
       align-self: flex-end;
     }
 
-    /* Wygenerowany obraz wewnątrz czatu */
     .ai-generated-image {
       max-width: 100%;
       max-height: 450px;
@@ -184,7 +187,6 @@
       display: block;
     }
 
-    /* Dolne paski wpisywania */
     .chat-input-area {
       padding: 20px 30px;
       background-color: #161b22;
@@ -231,7 +233,7 @@
       cursor: not-allowed;
     }
 
-    /* SYSTEM MODUŁÓW */
+    /* MODUŁY */
     .modules-container {
       padding: 40px;
       max-width: 1200px;
@@ -292,7 +294,7 @@
     .cookie-text { font-size: 14px; color: #c9d1d9; line-height: 1.5; }
     .cookie-btn { background-color: #2ea44f; color: white; border: none; padding: 10px 20px; font-size: 14px; font-weight: 600; border-radius: 6px; cursor: pointer; }
 
-    /* PARSER MARKDOWN */
+    /* REFFORMULOWANIE MARKDOWN */
     .message.ai h1, .message.ai h2, .message.ai h3 { color: #ffffff; margin-top: 12px; margin-bottom: 6px; font-weight: 600; }
     .message.ai code { background-color: #21262d; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #ff7b72; }
     .message.ai pre { background-color: #161b22; border: 1px solid #30363d; padding: 12px; border-radius: 6px; margin: 10px 0; overflow-x: auto; }
@@ -316,17 +318,13 @@
       <button id="menu-imageView" class="menu-button" onclick="switchView('imageView', this)">🎨 Generator Obrazów AI</button>
       <button id="menu-modulesView" class="menu-button" onclick="switchView('modulesView', this)">📦 Moduły Systemu</button>
     </div>
+
+    <div class="sidebar-footer">
+      <button class="clear-btn" onclick="clearHistory()">🗑️ Wyczyść historię</button>
+    </div>
   </div>
 
   <div class="main-content-area">
-    <div class="browser-navbar">
-      <div class="browser-controls">
-        <span>◀</span>
-        <span>▶</span>
-        <span style="font-size: 16px; margin-top: -1px; cursor: pointer;" onclick="clearHistory()">🗑️</span>
-      </div>
-      <div class="browser-search-bar" id="browserUrl">https://xelobrowser.ecosystem/chat-ai</div>
-    </div>
     
     <div id="chatView" class="viewport-content active">
       <div class="chat-container">
@@ -344,12 +342,12 @@
       <div class="chat-container">
         <div class="chat-messages" id="imageChatMessages">
           <div class="message ai">
-            Witaj w dedykowanym czacie graficznym! Wpisz poniżej opis obrazu, który chcesz wygenerować, a grafika zostanie wklejona bezpośrednio do historii tej rozmowy.
+            Witaj w dedykowanym czacie graficznym! Wpisz poniżej opis obrazu, który chcesz wygenerować, a potężna sieć neuronowa Flux wklei grafikę bezpośrednio do historii tej rozmowy.
           </div>
         </div>
         <div class="chat-input-area">
           <div class="input-wrapper">
-            <input type="text" id="imageInput" placeholder="Opisz obraz (np. 'kot astronauta na księżycu, styl cyfrowy')...">
+            <input type="text" id="imageInput" placeholder="Opisz obraz (np. 'czarny kot pijący kawę, styl cyberpunk')...">
             <button id="imageSendBtn" onclick="sendImageRequest()">Generuj obraz</button>
           </div>
         </div>
@@ -423,7 +421,7 @@
         localStorage.removeItem("xelo_chat_history");
         localStorage.removeItem("xelo_image_chat_history");
         document.getElementById('chatMessages').innerHTML = `<div class="message ai">${initialWelcomeMessage}</div>`;
-        document.getElementById('imageChatMessages').innerHTML = `<div class="message ai">Witaj w dedykowanym czacie graficznym! Wpisz poniżej opis obrazu, który chcesz wygenerować, a grafika zostanie wklejona bezpośrednio do historii tej rozmowy.</div>`;
+        document.getElementById('imageChatMessages').innerHTML = `<div class="message ai">Witaj w dedykowanym czacie graficznym! Wpisz poniżej opis obrazu, który chcesz wygenerować, a potężna sieć neuronowa Flux wklei grafikę bezpośrednio do historii tej rozmowy.</div>`;
       }
     }
 
@@ -446,9 +444,6 @@
       const target = document.getElementById(viewId);
       if (target) target.classList.add('active');
       buttonEl.classList.add('active');
-
-      const routes = { chatView: 'chat-ai', imageView: 'image-generator', modulesView: 'modules' };
-      document.getElementById('browserUrl').textContent = `https://xelobrowser.ecosystem/${routes[viewId]}`;
       localStorage.setItem("xelo_active_tab", viewId);
     }
 
@@ -486,7 +481,7 @@
       container.scrollTop = container.scrollHeight;
     }
 
-    // OBSŁUGA CZATU GRAFICZNEGO (BEZPOŚREDNIO W DYMKU)
+    // OBSŁUGA CZATU GRAFICZNEGO
     async function sendImageRequest() {
       const inputEl = document.getElementById('imageInput');
       const container = document.getElementById('imageChatMessages');
@@ -495,14 +490,12 @@
 
       const btn = document.getElementById('imageSendBtn');
 
-      // Dodaj prompt do okna czatu
       const userDiv = document.createElement('div');
       userDiv.className = 'message user';
       userDiv.textContent = prompt;
       container.appendChild(userDiv);
       inputEl.value = '';
 
-      // Dodaj dymek oczekiwania
       const aiDiv = document.createElement('div');
       aiDiv.className = 'message ai';
       aiDiv.innerHTML = `🎨 <em>Generuję obraz dla: "${prompt}"... Proszę czekać...</em>`;
@@ -521,11 +514,7 @@
         if (!response.ok) throw new Error();
 
         const base64Data = await response.text();
-
-        // Podmień status ładowania na gotowy element IMG
         aiDiv.innerHTML = `<div style="margin-bottom: 8px;">Oto Twój wygenerowany obraz:</div><img class="ai-generated-image" src="data:image/jpeg;base64,${base64Data}" alt="${prompt}">`;
-        
-        // Zapisz zaktualizowaną strukturę czatu graficznego w localStorage
         localStorage.setItem("xelo_image_chat_history", container.innerHTML);
 
       } catch (error) {
@@ -536,7 +525,6 @@
       }
     }
 
-    // Obsługa kliknięcia klawisza Enter
     document.getElementById('userInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
     document.getElementById('imageInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') sendImageRequest(); });
   </script>
