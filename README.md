@@ -26,7 +26,7 @@
 + 📱 Fully Responsive – flawlessly scales and adapts to smartphones, tablets, and desktop computers.
 + 🚀 GitHub Pages Ready – fully optimized to be deployed and hosted for free, running 100% serverless.
 
-<br>
+
 
 ## 📰 Aktualności (News)
 
