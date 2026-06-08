@@ -3,342 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XeloAI Workspace</title>
+  <title>XeloAI</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      background-color: #000000;
-      color: #f0f3f5;
-      display: flex;
-      height: 100vh;
-      max-height: 100vh;
-      overflow: hidden;
-    }
-
-    /* PASEK BOCZNY */
-    .sidebar-browser {
-      width: 280px;
-      min-width: 280px;
-      max-width: 280px;
-      background-color: #0d1117;
-      border-right: 1px solid #21262d;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      z-index: 10;
-    }
-
-    .sidebar-header {
-      padding: 16px;
-      background-color: #161b22;
-      border-bottom: 1px solid #21262d;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .sidebar-header h2 {
-      font-size: 18px;
-      font-weight: 600;
-      color: #ffffff;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      background-color: #2ea44f;
-      border-radius: 50%;
-      margin-left: auto;
-    }
-
-    .sidebar-menu {
-      display: flex;
-      flex-direction: column;
-      padding: 12px;
-      gap: 6px;
-      flex: 1;
-      overflow-y: auto;
-    }
-
-    .menu-button {
-      background: none;
-      border: none;
-      padding: 12px 16px;
-      color: #8b949e;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      border-radius: 6px;
-      transition: all 0.2s ease;
-      text-align: left;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-    }
-
-    .menu-button:hover {
-      color: #c9d1d9;
-      background-color: #1f242c;
-    }
-
-    .menu-button.active {
-      color: #ffffff;
-      background-color: #1f242c;
-      border-left: 3px solid #f7781e;
-      font-weight: 600;
-    }
-
-    .sidebar-footer {
-      padding: 12px;
-      border-top: 1px solid #21262d;
-      background-color: #161b22;
-    }
-
-    .clear-btn {
-      background-color: #21262d;
-      color: #ff7b72;
-      border: 1px solid #30363d;
-      padding: 10px;
-      width: 100%;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: background 0.2s;
-    }
-
-    .clear-btn:hover {
-      background-color: #8c2323;
-      color: #ffffff;
-      border-color: #ff7b72;
-    }
-
-    /* GŁÓWNY PANEL ROBOCZY */
-    .main-content-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background-color: #000000;
-      height: 100%;
-      max-height: 100%;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .viewport-content {
-      display: none;
-      flex: 1;
-      flex-direction: column;
-      height: 100%;
-      max-height: 100%;
-      overflow: hidden;
-    }
-
-    .viewport-content.active {
-      display: flex;
-    }
-
-    /* STRUKTURA CZATU */
-    .chat-container {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      max-height: 100%;
-    }
-
-    /* OKNO WIADOMOŚCI */
-    .chat-messages {
-      flex: 1;
-      padding: 30px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .message {
-      max-width: 75%;
-      padding: 16px 20px;
-      border-radius: 12px;
-      font-size: 15.5px;
-      line-height: 1.6;
-      word-wrap: break-word;
-    }
-
-    .message.ai {
-      background-color: #0d1117;
-      color: #e6edf3;
-      align-self: flex-start;
-      border: 1px solid #21262d;
-    }
-
-    .message.user {
-      background-color: #f7781e;
-      color: #ffffff;
-      align-self: flex-end;
-    }
-
-    .ai-generated-image {
-      max-width: 100%;
-      max-height: 450px;
-      border-radius: 8px;
-      margin-top: 12px;
-      border: 1px solid #30363d;
-      display: block;
-    }
-
-    /* PANEL DOLNY */
-    .chat-input-area {
-      padding: 20px 30px;
-      background-color: #161b22;
-      border-top: 1px solid #21262d;
-    }
-
-    .input-wrapper {
-      display: flex;
-      align-items: flex-end;
-      gap: 12px;
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-    }
-
-    .chat-input-area textarea {
-      flex: 1;
-      background-color: #0d1117;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 14px 18px;
-      color: #f0f3f5;
-      font-size: 15px;
-      outline: none;
-      resize: none;
-      height: 50px;
-      max-height: 160px;
-      line-height: 1.4;
-      font-family: inherit;
-    }
-
-    .chat-input-area textarea:focus {
-      border-color: #f7781e;
-    }
-
-    .chat-input-area button {
-      background-color: #f7781e;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 14px 28px;
-      font-weight: 600;
-      font-size: 15px;
-      cursor: pointer;
-      height: 50px;
-      transition: background 0.2s;
-    }
-
-    .chat-input-area button:disabled {
-      background-color: #30363d;
-      color: #8b949e;
-      cursor: not-allowed;
-    }
-
-    /* ANIMACJA PISANIA AI */
-    .typing-indicator {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 5px 0;
-    }
-
-    .typing-indicator span {
-      width: 8px;
-      height: 8px;
-      background-color: #f7781e;
-      border-radius: 50%;
-      display: inline-block;
-      animation: bounce 1.4s infinite ease-in-out both;
-    }
-
-    .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
-    .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
-
-    @keyframes bounce {
-      0%, 80%, 100% { transform: scale(0); }
-      40% { transform: scale(1.0); }
-    }
-
-    /* SYSTEM MODUŁÓW */
-    .modules-container {
-      padding: 40px;
-      max-width: 1200px;
-      width: 100%;
-      margin: 0 auto;
-      overflow-y: auto;
-    }
-
-    .modules-title {
-      font-size: 22px;
-      margin-bottom: 20px;
-      color: #ffffff;
-    }
-
-    .equal-grid {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .equal-card {
-      flex: 1;
-      min-width: 280px;
-      background-color: #0d1117;
-      border: 1px solid #21262d;
-      border-radius: 8px;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .equal-card h3 {
-      font-size: 18px;
-      color: #ffffff;
-      margin-bottom: 12px;
-    }
-
-    .equal-card p {
-      color: #8b949e;
-      font-size: 14px;
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
-
-    .status-badge {
-      align-self: flex-start;
-      font-size: 11px;
-      font-weight: bold;
-      padding: 4px 8px;
-      border-radius: 4px;
-      background-color: #30363d;
-      color: #f7781e;
-    }
-
-    /* FORMATOWANIE MARKDOWN */
-    .message.ai h1, .message.ai h2, .message.ai h3 { color: #ffffff; margin-top: 12px; margin-bottom: 6px; font-weight: 600; }
-    .message.ai code { background-color: #21262d; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #ff7b72; }
-    .message.ai pre { background-color: #161b22; border: 1px solid #30363d; padding: 12px; border-radius: 6px; margin: 10px 0; overflow-x: auto; }
-    .message.ai pre code { background: none; padding: 0; color: #e6edf3; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { background-color: #000000; color: #f0f3f5; display: flex; height: 100vh; overflow: hidden; }
+    .sidebar-browser { width: 280px; background-color: #0d1117; border-right: 1px solid #21262d; display: flex; flex-direction: column; }
+    .sidebar-header { padding: 16px; background-color: #161b22; border-bottom: 1px solid #21262d; display: flex; align-items: center; gap: 12px; }
+    .sidebar-header h2 { font-size: 18px; color: #ffffff; }
+    .status-dot { width: 8px; height: 8px; background-color: #2ea44f; border-radius: 50%; margin-left: auto; }
+    .sidebar-menu { display: flex; flex-direction: column; padding: 12px; gap: 6px; flex: 1; }
+    .menu-button { background: none; border: none; padding: 12px 16px; color: #8b949e; font-size: 14px; cursor: pointer; border-radius: 6px; text-align: left; width: 100%; }
+    .menu-button:hover { background-color: #1f242c; color: #c9d1d9; }
+    .menu-button.active { color: #ffffff; background-color: #1f242c; border-left: 3px solid #f7781e; font-weight: 600; }
+    .sidebar-footer { padding: 12px; border-top: 1px solid #21262d; }
+    .clear-btn { background-color: #21262d; color: #ff7b72; border: 1px solid #30363d; padding: 10px; width: 100%; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; }
+    .clear-btn:hover { background-color: #8c2323; color: white; }
+    .main-content-area { flex: 1; display: flex; flex-direction: column; background-color: #000000; height: 100%; overflow: hidden; }
+    .viewport-content { display: none; flex: 1; flex-direction: column; height: 100%; overflow: hidden; }
+    .viewport-content.active { display: flex; }
+    .chat-container { display: flex; flex-direction: column; height: 100%; }
+    .chat-messages { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+    .message { max-width: 75%; padding: 16px 20px; border-radius: 12px; font-size: 15px; line-height: 1.6; }
+    .message.ai { background-color: #0d1117; color: #e6edf3; align-self: flex-start; border: 1px solid #21262d; }
+    .message.user { background-color: #f7781e; color: #ffffff; align-self: flex-end; }
+    .ai-generated-image { max-width: 100%; max-height: 400px; border-radius: 8px; margin-top: 10px; border: 1px solid #30363d; display: block; }
+    .chat-input-area { padding: 20px 30px; background-color: #161b22; border-top: 1px solid #21262d; }
+    .input-wrapper { display: flex; gap: 12px; max-width: 1200px; margin: 0 auto; width: 100%; }
+    .chat-input-area textarea { flex: 1; background-color: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 14px; color: #f0f3f5; font-size: 15px; outline: none; resize: none; height: 50px; }
+    .chat-input-area button { background-color: #f7781e; color: white; border: none; border-radius: 8px; padding: 0 24px; font-weight: bold; cursor: pointer; height: 50px; }
+    .chat-input-area button:disabled { background-color: #30363d; color: #8b949e; cursor: not-allowed; }
+    .modules-container { padding: 40px; }
+    .equal-grid { display: flex; gap: 20px; }
+    .equal-card { background-color: #0d1117; border: 1px solid #21262d; padding: 20px; border-radius: 8px; flex: 1; }
   </style>
 </head>
 <body>
@@ -348,31 +44,28 @@
       <span style="font-size: 22px;">⚙️</span>
       <div>
         <h2>XeloAI</h2>
-        <span style="font-size: 11px; color: #8b949e; display: block;">Workspace v1.8</span>
+        <span style="font-size: 11px; color: #8b949e;">Workspace v1.9</span>
       </div>
       <div class="status-dot"></div>
     </div>
-
     <div class="sidebar-menu">
-      <button id="menu-chatView" class="menu-button active" onclick="switchView('chatView', this)">🤖 Inteligentny Czat AI</button>
-      <button id="menu-imageView" class="menu-button" onclick="switchView('imageView', this)">🎨 Generator Obrazów AI</button>
-      <button id="menu-modulesView" class="menu-button" onclick="switchView('modulesView', this)">📦 Moduły Systemu</button>
+      <button class="menu-button active" onclick="switchView('chatView', this)">🤖 Inteligentny Czat AI</button>
+      <button class="menu-button" onclick="switchView('imageView', this)">🎨 Generator Obrazów AI</button>
+      <button class="menu-button" onclick="switchView('modulesView', this)">📦 Moduły Systemu</button>
     </div>
-
     <div class="sidebar-footer">
       <button class="clear-btn" onclick="clearHistory()">🗑️ Wyczyść historię</button>
     </div>
   </div>
 
   <div class="main-content-area">
-    
     <div id="chatView" class="viewport-content active">
       <div class="chat-container">
-        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-messages" id="chatMessages"><div class="message ai">Witaj w XeloAI! W czym mogę pomóc?</div></div>
         <div class="chat-input-area">
           <div class="input-wrapper">
-            <textarea id="userInput" placeholder="Zadaj pytanie sztucznej inteligencji... (Enter wysyła)"></textarea>
-            <button id="sendBtn" onclick="sendMessage()">Wyślij</button>
+            <textarea id="userInput" placeholder="Zadaj pytanie..."></textarea>
+            <button onclick="sendMessage()">Wyślij</button>
           </div>
         </div>
       </div>
@@ -380,14 +73,10 @@
 
     <div id="imageView" class="viewport-content">
       <div class="chat-container">
-        <div class="chat-messages" id="imageChatMessages">
-          <div class="message ai">
-            Witaj w czacie graficznym! Opisz obraz, który chcesz stworzyć, a sztuczna inteligencja wygeneruje go i wklei do historii konwersacji.
-          </div>
-        </div>
+        <div class="chat-messages" id="imageChatMessages"><div class="message ai">Opisz obraz, który chcesz stworzyć...</div></div>
         <div class="chat-input-area">
           <div class="input-wrapper">
-            <textarea id="imageInput" placeholder="Opisz obraz... (Enter generuje)"></textarea>
+            <textarea id="imageInput" placeholder="Opisz obraz (np. kot pijący kawę)..."></textarea>
             <button id="imageSendBtn" onclick="sendImageRequest()">Generuj</button>
           </div>
         </div>
@@ -396,184 +85,99 @@
 
     <div id="modulesView" class="viewport-content">
       <div class="modules-container">
-        <h2 class="modules-title">Dostępne Moduły Systemowe</h2>
+        <h2 style="margin-bottom:20px;">Moduły Systemu</h2>
         <div class="equal-grid">
-          <div class="equal-card">
-            <div>
-              <h3>🤖 Inteligentny Czat AI</h3>
-              <p>Zintegrowany z silnikiem Gemini 2.5 Flash.</p>
-            </div>
-            <span class="status-badge">STATUS: AKTYWNY</span>
-          </div>
-          <div class="equal-card">
-            <div>
-              <h3>🎨 Generator Obrazów</h3>
-              <p>Autonomiczny kreator graficzny zasilany architekturą Flux.</p>
-            </div>
-            <span class="status-badge">STATUS: AKTYWNY</span>
-          </div>
+          <div class="equal-card"><h3>🤖 Czat</h3><p>Aktywny (Gemini 2.5 Flash)</p></div>
+          <div class="equal-card"><h3>🎨 Grafika</h3><p>Aktywny (Flux Engine)</p></div>
         </div>
       </div>
     </div>
-
   </div>
 
   <script>
     const serverUrl = 'https://ewewerbanEwewerban--60e9fcc8633011f1b4d31607ee4eb77e.web.val.run';
-    const initialWelcomeMessage = `Witaj w panelu Xelo AI! Silnik został zaktualizowany do stabilnej architektury Gemini 2.5 Flash. W czym mogę pomóc?`;
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const savedChat = localStorage.getItem("xelo_chat_history");
-      const container = document.getElementById('chatMessages');
-      container.innerHTML = savedChat ? savedChat : `<div class="message ai">${initialWelcomeMessage}</div>`;
-      container.scrollTop = container.scrollHeight;
-
-      const savedImageChat = localStorage.getItem("xelo_image_chat_history");
-      if (savedImageChat) {
-        document.getElementById('imageChatMessages').innerHTML = savedImageChat;
-      }
-      document.getElementById('imageChatMessages').scrollTop = document.getElementById('imageChatMessages').scrollHeight;
-
-      const savedTab = localStorage.getItem("xelo_active_tab") || "chatView";
-      const activeBtn = document.getElementById(`menu-${savedTab}`);
-      if (activeBtn) switchView(savedTab, activeBtn);
-
-      setupTextareaKeydown('userInput', sendMessage);
-      setupTextareaKeydown('imageInput', sendImageRequest);
-    });
-
-    function setupTextareaKeydown(id, submitFunction) {
-      const textarea = document.getElementById(id);
-      textarea.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          submitFunction();
-        }
-        setTimeout(() => autoResizeTextarea(textarea), 10);
-      });
-      textarea.addEventListener('input', function() {
-        autoResizeTextarea(this);
-      });
-    }
-
-    function autoResizeTextarea(textarea) {
-      textarea.style.height = 'auto';
-      textarea.style.height = (textarea.scrollHeight) + 'px';
+    function switchView(viewId, btn) {
+      document.querySelectorAll('.viewport-content').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.menu-button').forEach(b => b.classList.remove('active'));
+      document.getElementById(viewId).classList.add('active');
+      btn.classList.add('active');
     }
 
     function clearHistory() {
-      if (confirm("Czy na pewno chcesz wyczyścić całą historię czatów?")) {
-        localStorage.removeItem("xelo_chat_history");
-        localStorage.removeItem("xelo_image_chat_history");
-        document.getElementById('chatMessages').innerHTML = `<div class="message ai">${initialWelcomeMessage}</div>`;
-        document.getElementById('imageChatMessages').innerHTML = `<div class="message ai">Witaj w czacie graficznym! Opisz obraz, który chcesz stworzyć...</div>`;
-      }
+      localStorage.removeItem("xelo_chat_html");
+      localStorage.removeItem("xelo_image_html");
+      document.getElementById('chatMessages').innerHTML = '<div class="message ai">Witaj w XeloAI! W czym mogę pomóc?</div>';
+      document.getElementById('imageChatMessages').innerHTML = '<div class="message ai">Opisz obraz, który chcesz stworzyć...</div>';
     }
 
-    function parseMarkdown(text) {
-      let html = text;
-      html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-      html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
-      html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
-      html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
-      html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
-      html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-      html = html.replace(/\n/g, '<br>');
-      return html;
-    }
+    // Ładowanie historii przy starcie
+    if(localStorage.getItem("xelo_chat_html")) document.getElementById('chatMessages').innerHTML = localStorage.getItem("xelo_chat_html");
+    if(localStorage.getItem("xelo_image_html")) document.getElementById('imageChatMessages').innerHTML = localStorage.getItem("xelo_image_html");
 
-    function switchView(viewId, buttonEl) {
-      document.querySelectorAll('.viewport-content').forEach(v => v.classList.remove('active'));
-      document.querySelectorAll('.menu-button').forEach(b => b.classList.remove('active'));
-      
-      const target = document.getElementById(viewId);
-      if (target) target.classList.add('active');
-      buttonEl.classList.add('active');
-      localStorage.setItem("xelo_active_tab", viewId);
-    }
-
+    // WYSYŁANIE TEKSTU
     async function sendMessage() {
-      const inputEl = document.getElementById('userInput');
-      const container = document.getElementById('chatMessages');
-      const text = inputEl.value.trim();
-      if (!text) return;
+      const input = document.getElementById('userInput');
+      const text = input.value.trim();
+      if(!text) return;
 
-      const userDiv = document.createElement('div');
-      userDiv.className = 'message user';
-      userDiv.textContent = text;
-      container.appendChild(userDiv);
-      
-      inputEl.value = '';
-      inputEl.style.height = '50px';
+      const container = document.getElementById('chatMessages');
+      container.innerHTML += `<div class="message user">${text}</div>`;
+      input.value = '';
 
       const aiDiv = document.createElement('div');
       aiDiv.className = 'message ai';
-      aiDiv.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
+      aiDiv.textContent = 'Generowanie odpowiedzi...';
       container.appendChild(aiDiv);
       container.scrollTop = container.scrollHeight;
 
       try {
-        const response = await fetch(serverUrl, {
+        const r = await fetch(serverUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ type: 'text', prompt: text })
         });
-        const replyText = await response.text();
-        
-        aiDiv.innerHTML = parseMarkdown(replyText);
-        localStorage.setItem("xelo_chat_history", container.innerHTML);
-      } catch (error) {
-        aiDiv.textContent = 'Błąd połączenia z serwerem. Spróbuj ponownie.';
+        aiDiv.textContent = await r.text();
+        localStorage.setItem("xelo_chat_html", container.innerHTML);
+      } catch(e) {
+        aiDiv.textContent = 'Błąd połączenia.';
       }
       container.scrollTop = container.scrollHeight;
     }
 
+    // GENEROWANIE OBRAZU — TU JEST PEŁNA NAPRAWA
     async function sendImageRequest() {
-      const inputEl = document.getElementById('imageInput');
-      const container = document.getElementById('imageChatMessages');
-      const prompt = inputEl.value.trim();
-      if (!prompt) return;
+      const input = document.getElementById('imageInput');
+      const promptText = input.value.trim();
+      if(!promptText) return;
 
+      const container = document.getElementById('imageChatMessages');
       const btn = document.getElementById('imageSendBtn');
 
-      const userDiv = document.createElement('div');
-      userDiv.className = 'message user';
-      userDiv.textContent = prompt;
-      container.appendChild(userDiv);
-      
-      inputEl.value = '';
-      inputEl.style.height = '50px';
+      container.innerHTML += `<div class="message user">${promptText}</div>`;
+      input.value = '';
+      btn.disabled = true;
 
       const aiDiv = document.createElement('div');
       aiDiv.className = 'message ai';
-      aiDiv.innerHTML = `<div style="margin-bottom: 8px;">🎨 Generowanie obrazu graficznego...</div><div class="typing-indicator"><span></span><span></span><span></span></div>`;
+      aiDiv.textContent = 'Trwa projektowanie grafiki przez AI...';
       container.appendChild(aiDiv);
       container.scrollTop = container.scrollHeight;
 
-      btn.disabled = true;
-
       try {
-        const response = await fetch(serverUrl, {
+        const r = await fetch(serverUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'image', prompt: prompt })
+          body: JSON.stringify({ type: 'image', prompt: promptText })
         });
-
-        if (!response.ok) throw new Error();
-
-        const serverReply = await response.text();
-
-        // Walidacja: Sprawdzamy czy odpowiedź z serwera wygląda na poprawny URL
-        if(!serverReply.startsWith('http') && !serverReply.startsWith('data:image')) {
-          aiDiv.innerHTML = `<span style="color: #ff7b72;">❌ Serwer zamiast obrazu zwrócił tekst błędu:</span><br><pre style="margin-top:5px; color:#ff7b72;">${serverReply}</pre>`;
-          return;
-        }
-
-        aiDiv.innerHTML = `<div style="margin-bottom: 8px;">Oto Twój wygenerowany obraz:</div><img class="ai-generated-image" src="${serverReply}" alt="Wygenerowano: ${prompt}" onerror="this.outerHTML='<span style=\'color: #ff7b72;\'>❌ Nie udało się załadować pliku graficznego.</span>'">`;
-        localStorage.setItem("xelo_image_chat_history", container.innerHTML);
-
-      } catch (error) {
-        aiDiv.innerHTML = `<span style="color: #ff7b72;">❌ Serwer nie wygenerował obrazu. Spróbuj ponownie za chwilę.</span>`;
+        
+        const imageUrl = await r.text();
+        
+        // Wstrzykujemy czysty znacznik img z pobranym adresem URL obrazka
+        aiDiv.innerHTML = `<div>Oto Twój obraz:</div><img class="ai-generated-image" src="${imageUrl.trim()}" alt="AI Image">`;
+        localStorage.setItem("xelo_image_html", container.innerHTML);
+      } catch(e) {
+        aiDiv.textContent = 'Nie udało się wygenerować grafiki.';
       } finally {
         btn.disabled = false;
         container.scrollTop = container.scrollHeight;
