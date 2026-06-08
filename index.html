@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xelo AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="avatar">AI</div>
+            <div>
+                <h2>Asystent AI</h2>
+                <p class="status">Online</p>
+            </div>
+        </div>
+
+        <div class="chat-box" id="chatBox">
+            <div class="message bot-message">
+                Cześć! Jestem Twoim inteligentnym asystentem. O czym chcesz porozmawiać?
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Napisz coś do AI..." onkeydown="if(event.key === 'Enter') sendMessage()">
+            <button onclick="sendMessage()">Wyślij</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const inputField = document.getElementById('userInput');
+            const messageText = inputField.value.trim();
+            
+            if (messageText === '') return; // Jeśli puste, nic nie rób
+
+            const chatBox = document.getElementById('chatBox');
+
+            // 1. Dodaj wiadomość użytkownika do czatu
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'message user-message';
+            userMessageDiv.textContent = messageText;
+            chatBox.appendChild(userMessageDiv);
+
+            // Czyszczenie pola wpisywania
+            inputField.value = '';
+            
+            // Przewiń czat na dół
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // 2. Symulacja odpowiedzi AI po krótkiej chwili (1 sekunda)
+            setTimeout(() => {
+                const botMessageDiv = document.createElement('div');
+                botMessageDiv.className = 'message bot-message';
+                
+                // Generowanie odpowiedzi bota
+                botMessageDiv.textContent = getBotResponse(messageText);
+                
+                chatBox.appendChild(botMessageDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1000);
+        }
+
+        // Prosta logika odpowiedzi naszego "AI"
+        function getBotResponse(userText) {
+            const text = userText.toLowerCase();
+            
+            if (text.includes('cześć') || text.includes('hej') || text.includes('siema')) {
+                return "Cześć! Miło Cię widzieć. Jak mogę Ci dzisiaj pomóc?";
+            } else if (text.includes('jak się masz') || text.includes('co tam')) {
+                return "Działam doskonale, dziękuję! Moje procesory pracują na pełnych obrotach. A u Ciebie?";
+            } else if (text.includes('kto cię stworzył') || text.includes('autor')) {
+                return "Zostałem stworzony przez młodego i zdolnego programistę na GitHubie!";
+            } else if (text.includes('pogoda')) {
+                return "Zawsze mam w sercu słońce, ale jeśli chcesz znać prawdziwą pogodę, wyjrzyj za okno! ☀️";
+            } else if (text.includes('pomoc') || text.includes('co potrafisz')) {
+                return "Potrafię odpowiadać na powitania, rozmawiać o moim twórcy i o samopoczuciu. Spróbuj napisać 'cześć' albo 'kto cię stworzył'!";
+            } else {
+                return "To bardzo ciekawe! Wciąż się uczę, więc nie wszystko jeszcze rozumiem, ale chętnie dowiem się więcej.";
+            }
+        }
+    </script>
+</body>
+</html>
