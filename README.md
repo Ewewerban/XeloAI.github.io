@@ -6,7 +6,7 @@
     <td bgcolor="#0d1117" valign="top">
       <br />
       <img src="https://fav.farm/🤖" width="24" height="24" align="left" />
-      <strong style="color: #ffffff; font-size: 16px; margin-left: 8px;">generowanie obrazów</strong>
+      <strong style="color: #ffffff; font-size: 16px; margin-left: 8px;">Generowanie obrazów</strong>
       <br /><br />
       <p style="color: #8b949e; font-size: 14px;">
         Dodano czat do generowania obrazów
@@ -14,7 +14,7 @@
 
 </p>
       <br />
-      </code> <code>v1.2</code>
+      </code> <code>v1.3</code>
       <br /><br />
     </td>
   </tr>
