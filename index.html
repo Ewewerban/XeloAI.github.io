@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XeloAI</title>
+  <title>XeloAI Workspace</title>
   <style>
     * {
       box-sizing: border-box;
@@ -348,7 +348,7 @@
       <span style="font-size: 22px;">⚙️</span>
       <div>
         <h2>XeloAI</h2>
-        <span style="font-size: 11px; color: #8b949e; display: block;">Workspace v1.7</span>
+        <span style="font-size: 11px; color: #8b949e; display: block;">Workspace v1.8</span>
       </div>
       <div class="status-dot"></div>
     </div>
@@ -371,7 +371,7 @@
         <div class="chat-messages" id="chatMessages"></div>
         <div class="chat-input-area">
           <div class="input-wrapper">
-            <textarea id="userInput" placeholder="Zadaj pytanie sztucznej inteligencji... (Enter wysyła, Shift+Enter nowa linia)"></textarea>
+            <textarea id="userInput" placeholder="Zadaj pytanie sztucznej inteligencji... (Enter wysyła)"></textarea>
             <button id="sendBtn" onclick="sendMessage()">Wyślij</button>
           </div>
         </div>
@@ -387,7 +387,7 @@
         </div>
         <div class="chat-input-area">
           <div class="input-wrapper">
-            <textarea id="imageInput" placeholder="Opisz obraz... (Enter generuje, Shift+Enter nowa linia)"></textarea>
+            <textarea id="imageInput" placeholder="Opisz obraz... (Enter generuje)"></textarea>
             <button id="imageSendBtn" onclick="sendImageRequest()">Generuj</button>
           </div>
         </div>
@@ -401,14 +401,14 @@
           <div class="equal-card">
             <div>
               <h3>🤖 Inteligentny Czat AI</h3>
-              <p>Zintegrowany z silnikiem Gemini 2.5 Flash. Odpowiada błyskawicznie na pytania programistyczne i ogólne.</p>
+              <p>Zintegrowany z silnikiem Gemini 2.5 Flash.</p>
             </div>
             <span class="status-badge">STATUS: AKTYWNY</span>
           </div>
           <div class="equal-card">
             <div>
               <h3>🎨 Generator Obrazów</h3>
-              <p>Autonomiczny kreator graficzny zasilany architekturą Flux. Generuje obrazy bezpośrednio jako linki do okna czatu.</p>
+              <p>Autonomiczny kreator graficzny zasilany architekturą Flux.</p>
             </div>
             <span class="status-badge">STATUS: AKTYWNY</span>
           </div>
@@ -466,7 +466,7 @@
         localStorage.removeItem("xelo_chat_history");
         localStorage.removeItem("xelo_image_chat_history");
         document.getElementById('chatMessages').innerHTML = `<div class="message ai">${initialWelcomeMessage}</div>`;
-        document.getElementById('imageChatMessages').innerHTML = `<div class="message ai">Witaj w czacie graficznym! Opisz obraz, który chcesz stworzyć, a sztuczna inteligencja wygeneruje go i wklei do historii konwersacji.</div>`;
+        document.getElementById('imageChatMessages').innerHTML = `<div class="message ai">Witaj w czacie graficznym! Opisz obraz, który chcesz stworzyć...</div>`;
       }
     }
 
@@ -561,9 +561,15 @@
 
         if (!response.ok) throw new Error();
 
-        const imageUrl = await response.text();
+        const serverReply = await response.text();
 
-        aiDiv.innerHTML = `<div style="margin-bottom: 8px;">Oto Twój wygenerowany obraz:</div><img class="ai-generated-image" src="${imageUrl}" alt="Wygenerowano: ${prompt}">`;
+        // Walidacja: Sprawdzamy czy odpowiedź z serwera wygląda na poprawny URL
+        if(!serverReply.startsWith('http') && !serverReply.startsWith('data:image')) {
+          aiDiv.innerHTML = `<span style="color: #ff7b72;">❌ Serwer zamiast obrazu zwrócił tekst błędu:</span><br><pre style="margin-top:5px; color:#ff7b72;">${serverReply}</pre>`;
+          return;
+        }
+
+        aiDiv.innerHTML = `<div style="margin-bottom: 8px;">Oto Twój wygenerowany obraz:</div><img class="ai-generated-image" src="${serverReply}" alt="Wygenerowano: ${prompt}" onerror="this.outerHTML='<span style=\'color: #ff7b72;\'>❌ Nie udało się załadować pliku graficznego.</span>'">`;
         localStorage.setItem("xelo_image_chat_history", container.innerHTML);
 
       } catch (error) {
