@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XeloAI</title>
+    <title>Xelo AI</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="logo_xelo_ai.png">
 </head>
 <body>
 
     <div class="chat-container">
         <div class="chat-header">
-            <div class="orange-box"></div>
-            <div>
-                <h2>XeloAI</h2>
-                <p class="powered-by">powered by open ai engine</p>
+            <div class="header-main">
+                <img src="logo_xelo_ai.png" alt="Xelo AI Logo" class="logo">
+                <div>
+                    <h2>Xelo AI</h2>
+                    <p class="powered-by">powered by xelo node server</p>
+                </div>
             </div>
             <div class="status-dot" id="statusDot"></div>
         </div>
 
         <div class="chat-box" id="chatBox">
             <div class="message bot-message">
-                Witaj! Połączenie z prawdziwą siecią neuronową zostało pomyślnie skonfigurowane. Myślę w czasie rzeczywistym i odpowiem na każde Twoje pytanie. O co chcesz zapytać?
+                Witaj w Xelo AI!  O co chcesz zapytać?
             </div>
         </div>
 
@@ -31,8 +34,8 @@
     </div>
 
     <script>
-        // Stabilny, publiczny i darmowy punkt dostępowy do prawdziwego AI bez blokad CORS dla stron WWW
-        const API_URL = "https://open-ai-backend.lebyadyn.workers.dev/v1/chat/completions";
+        // Adres URL Twojego działającego serwera z Val Town
+        const MY_SERVER_URL = "https://ewewerbanEwewerban--60e9fcc8633011f1b4d31607ee4eb77e.web.val.run";
 
         async function sendMessage() {
             const inputField = document.getElementById('userInput');
@@ -43,7 +46,7 @@
             const statusDot = document.getElementById('statusDot');
             const sendBtn = document.getElementById('sendBtn');
 
-            // 1. Wyświetlenie wiadomości użytkownika
+            // 1. Dodanie wiadomości użytkownika do okna
             const userDiv = document.createElement('div');
             userDiv.className = 'message user-message';
             userDiv.textContent = messageText;
@@ -51,11 +54,10 @@
             inputField.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // 2. Włączenie animacji myślenia (status zacznie pulsować na pomarańczowo)
+            // 2. Start animacji myślenia bota
             statusDot.classList.add('typing');
             sendBtn.disabled = true;
 
-            // Tworzymy dymek dla bota
             const botDiv = document.createElement('div');
             botDiv.className = 'message bot-message';
             botDiv.textContent = "...";
@@ -63,37 +65,27 @@
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                // Wywołanie otwartego modelu sztucznej inteligencji
-                const response = await fetch(API_URL, {
+                // Bezpieczne wywołanie Twojego własnego serwera Node.js
+                const response = await fetch(MY_SERVER_URL, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        model: "gpt-3.5-turbo",
-                        messages: [
-                            { role: "system", content: "Jesteś asystentem AI o nazwie XeloAI, stworzonym dla ekosystemu XeloBrowser. Odpowiadasz krótko, zwięźle, konkretnie i zawsze w języku polskim. Masz unikalny czarno-pomarańczowy charakter." },
-                            { role: "user", content: messageText }
-                        ],
-                        temperature: 0.7
-                    })
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: messageText })
                 });
 
                 const data = await response.json();
                 
-                // Odczytywanie tekstu wygenerowanego przez AI
-                if (data && data.choices && data.choices[0] && data.choices[0].message) {
-                    botDiv.textContent = data.choices[0].message.content.trim();
+                if (data && data.response) {
+                    botDiv.textContent = data.response;
                 } else {
-                    botDiv.textContent = "Serwer przesłał dane w nieprawidłowym formacie. Spróbuj zadać pytanie ponownie.";
+                    botDiv.textContent = "Serwer Node.js odebrał zapytanie, ale nie przesłał odpowiedzi z AI. Sprawdź kartę 'Logs' w Val Town.";
                 }
 
             } catch (e) {
                 console.error(e);
-                botDiv.textContent = "Nie udało mi się połączyć z siecią neuronową. Serwer jest chwilowo przeciążony, spróbuj ponownie za moment.";
+                botDiv.textContent = "Nie udało się skomunikować z Twoim serwerem Node.js. Sprawdź, czy kod w Val Town jest poprawnie zapisany.";
             }
 
-            // 3. Przywrócenie działania interfejsu
+            // 3. Przywrócenie interfejsu do normy
             statusDot.classList.remove('typing');
             sendBtn.disabled = false;
             chatBox.scrollTop = chatBox.scrollHeight;
