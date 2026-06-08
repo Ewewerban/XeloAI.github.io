@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>XeloAI Browser Ecosystem</title>
   <style>
-    /* Reset i style nowoczesnego Dark Mode */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -21,7 +20,7 @@
       overflow: hidden;
     }
 
-    /* SIDEBAR */
+    /* LEWY PASEK BOCZNY */
     .sidebar-browser {
       width: 280px;
       background-color: #0d1117;
@@ -91,7 +90,7 @@
       font-weight: 600;
     }
 
-    /* GŁÓWNY OBSZAR */
+    /* GŁÓWNY OBSZAR ROBOCZY */
     .main-content-area {
       flex: 1;
       display: flex;
@@ -115,11 +114,6 @@
       font-size: 14px;
     }
 
-    .browser-controls span {
-      cursor: pointer;
-      user-select: none;
-    }
-
     .browser-search-bar {
       flex: 1;
       background-color: #0d1117;
@@ -134,20 +128,18 @@
       display: none;
       flex: 1;
       flex-direction: column;
-      overflow: hidden;
+      overflow-y: auto;
     }
 
     .viewport-content.active {
       display: flex;
     }
 
-    /* CZAT */
+    /* SEKJA CZATU */
     .chat-container {
-      flex: 1;
       display: flex;
       flex-direction: column;
       height: 100%;
-      background-color: #000000;
     }
 
     .chat-messages {
@@ -218,35 +210,62 @@
       font-weight: 600;
       font-size: 15px;
       cursor: pointer;
-      transition: background-color 0.2s;
     }
 
-    .chat-input-area button:hover {
-      background-color: #e06510;
+    /* SYSTEM RÓWNYCH RAMEK (MODUŁY) */
+    .modules-container {
+      padding: 40px;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
     }
 
-    /* GENERATOR */
-    .image-gen-viewport {
+    .modules-title {
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    /* Flexbox wymuszający równe wysokości ramek */
+    .equal-grid {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .equal-card {
       flex: 1;
+      min-width: 280px;
+      background-color: #0d1117;
+      border: 1px solid #21262d;
+      border-radius: 8px;
+      padding: 24px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-      text-align: center;
+      justify-content: space-between; /* Wyrównuje przyciski do dołu jeśli tekst ma inną długość */
     }
 
-    .image-gen-viewport h3 {
-      font-size: 24px;
+    .equal-card h3 {
+      font-size: 18px;
       color: #ffffff;
       margin-bottom: 12px;
     }
 
-    .image-gen-viewport p {
+    .equal-card p {
       color: #8b949e;
-      max-width: 460px;
-      font-size: 16px;
+      font-size: 14px;
       line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .status-badge {
+      align-self: flex-start;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background-color: #30363d;
+      color: #f7781e;
     }
   </style>
 </head>
@@ -264,7 +283,7 @@
 
     <div class="sidebar-menu">
       <button class="menu-button active" onclick="switchView('chatView', this)">🤖 Inteligentny Czat AI</button>
-      <button class="menu-button" onclick="switchView('imageView', this)">🎨 Generator Obrazów</button>
+      <button class="menu-button" onclick="switchView('modulesView', this)">📦 Moduły Systemu</button>
     </div>
   </div>
 
@@ -282,7 +301,7 @@
       <div class="chat-container">
         <div class="chat-messages" id="chatMessages">
           <div class="message ai">
-            Witaj w panelu Xelo AI! Bezpieczna architektura tekstowa działa pomyślnie na dużym ekranie. W czym mogę pomóc?
+            Witaj w zaktualizowanym panelu Xelo AI! Silnik został zaktualizowany do stabilnej architektury Gemini 2.5 Flash. W czym mogę pomóc?
           </div>
         </div>
 
@@ -295,11 +314,28 @@
       </div>
     </div>
 
-    <div id="imageView" class="viewport-content">
-      <div class="image-gen-viewport">
-        <div style="font-size: 72px; margin-bottom: 20px;">🎨</div>
-        <h3>Pełnoekranowe Generowanie Grafiki</h3>
-        <p>Trwają prace nad wdrożeniem interfejsu dla modeli Imagen 3 oraz Stable Diffusion. Funkcja pojawi się wkrótce.</p>
+    <div id="modulesView" class="viewport-content">
+      <div class="modules-container">
+        <h2 class="modules-title">Dostępne Moduły Systemowe</h2>
+        
+        <div class="equal-grid">
+          <div class="equal-card">
+            <div>
+              <h3>🤖 Inteligentny Czat AI</h3>
+              <p>Pełnoekranowe centrum dowodzenia zintegrowane z bezserwerowym silnikiem Gemini. Błyskawicznie odpowiada na pytania programistyczne i logiczne.</p>
+            </div>
+            <span class="status-badge">STATUS: AKTYWNY</span>
+          </div>
+
+          <div class="equal-card">
+            <div>
+              <h3>🎨 Generator Obrazów</h3>
+              <p>Nadchodzący moduł kreatywny dedykowany do generowania grafik przy użyciu zaawansowanych sieci neuronowych.</p>
+            </div>
+            <span class="status-badge" style="color: #8b949e;">W DRODZE</span>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -314,7 +350,7 @@
       buttonEl.classList.add('active');
 
       const urlBar = document.getElementById('browserUrl');
-      urlBar.textContent = viewId === 'chatView' ? 'https://xelobrowser.ecosystem/chat-ai' : 'https://xelobrowser.ecosystem/image-generator';
+      urlBar.textContent = viewId === 'chatView' ? 'https://xelobrowser.ecosystem/chat-ai' : 'https://xelobrowser.ecosystem/modules';
     }
 
     async function sendMessage() {
@@ -334,7 +370,7 @@
 
       const aiDiv = document.createElement('div');
       aiDiv.className = 'message ai';
-      aiDiv.textContent = 'XeloAI generuje odpowiedź...';
+      aiDiv.textContent = 'XeloAI generuje odpowiedź przy użyciu modelu Gemini 2.5...';
       container.appendChild(aiDiv);
       container.scrollTop = container.scrollHeight;
 
@@ -348,7 +384,7 @@
         const replyText = await response.text();
         aiDiv.textContent = replyText;
       } catch (error) {
-        aiDiv.textContent = 'Błąd połączenia z serwerem.';
+        aiDiv.textContent = 'Błąd połączenia z serwerem Val Town.';
       }
       container.scrollTop = container.scrollHeight;
     }
