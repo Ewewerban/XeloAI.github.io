@@ -6,6 +6,29 @@
     <td bgcolor="#0d1117" valign="top">
       <br />
       <img src="https://fav.farm/🤖" width="24" height="24" align="left" />
+      <strong style="color: #ffffff; font-size: 16px; margin-left: 8px;">generowanie obrazów</strong>
+      <br /><br />
+      <p style="color: #8b949e; font-size: 14px;">
+        Dodano czat do generowania obrazów
+      
+
+</p>
+      <br />
+      </code> <code>v1.2</code>
+      <br /><br />
+    </td>
+  </tr>
+</table>
+
+
+__________________________________________________________________________________________________
+
+
+<table width="100%">
+  <tr>
+    <td bgcolor="#0d1117" valign="top">
+      <br />
+      <img src="https://fav.farm/🤖" width="24" height="24" align="left" />
       <strong style="color: #ffffff; font-size: 16px; margin-left: 8px;">Bug Fixes</strong>
       <br /><br />
       <p style="color: #8b949e; font-size: 14px;">
