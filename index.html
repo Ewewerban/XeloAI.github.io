@@ -9,32 +9,32 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
 
     body {
-      background-color: #000000;
-      color: #f0f3f5;
+      background-color: #131314; /* Kolor tła Gemini */
+      color: #e3e3e3;
       display: flex;
       height: 100vh;
+      max-height: 100vh;
       overflow: hidden;
     }
 
-    /* PASEK BOCZNY */
+    /* PASEK BOCZNY (STABILNY) */
     .sidebar-browser {
       width: 280px;
-      background-color: #0d1117;
-      border-right: 1px solid #21262d;
+      min-width: 280px;
+      max-width: 280px;
+      background-color: #1e1f20;
+      border-right: 1px solid #3c4043;
       display: flex;
       flex-direction: column;
       height: 100%;
-      z-index: 10;
     }
 
     .sidebar-header {
-      padding: 16px;
-      background-color: #161b22;
-      border-bottom: 1px solid #21262d;
+      padding: 20px;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -43,13 +43,13 @@
     .sidebar-header h2 {
       font-size: 18px;
       font-weight: 600;
-      color: #ffffff;
+      color: #fff;
     }
 
     .status-dot {
       width: 8px;
       height: 8px;
-      background-color: #2ea44f;
+      background-color: #34a853;
       border-radius: 50%;
       margin-left: auto;
     }
@@ -57,242 +57,280 @@
     .sidebar-menu {
       display: flex;
       flex-direction: column;
-      padding: 12px;
-      gap: 6px;
+      padding: 0 12px;
+      gap: 4px;
       flex: 1;
+      overflow-y: auto;
     }
 
     .menu-button {
       background: none;
       border: none;
-      padding: 12px 16px;
-      color: #8b949e;
+      padding: 14px 16px;
+      color: #c4c7c5;
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
-      border-radius: 6px;
-      transition: all 0.2s ease;
+      border-radius: 100px; /* Okrągłe przyciski jak w Google */
+      transition: background 0.2s;
       text-align: left;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       width: 100%;
     }
 
     .menu-button:hover {
-      color: #c9d1d9;
-      background-color: #1f242c;
+      background-color: #2d2f31;
+      color: #fff;
     }
 
     .menu-button.active {
-      color: #ffffff;
-      background-color: #1f242c;
-      border-left: 3px solid #f7781e;
+      color: #fff;
+      background-color: #004a77; /* Delikatny niebieski akcent */
       font-weight: 600;
     }
 
     .sidebar-footer {
-      padding: 12px;
-      border-top: 1px solid #21262d;
-      background-color: #161b22;
+      padding: 16px;
     }
 
     .clear-btn {
-      background-color: #21262d;
-      color: #ff7b72;
-      border: 1px solid #30363d;
+      background: none;
+      color: #b3b3b3;
+      border: 1px solid #444746;
       padding: 10px;
       width: 100%;
-      border-radius: 6px;
+      border-radius: 100px;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 500;
       font-size: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: background 0.2s;
+      transition: all 0.2s;
     }
 
     .clear-btn:hover {
-      background-color: #8c2323;
-      color: #ffffff;
-      border-color: #ff7b72;
+      background-color: #372121;
+      color: #ec928e;
+      border-color: #ec928e;
     }
 
-    /* GŁÓWNY PANEL ROBOCZY */
+    /* GŁÓWNY OBSZAR ROBOCZY (BEZWZGLĘDNIE ZABLOKOWANY PRZED ROZJEŻDŻANIEM) */
     .main-content-area {
       flex: 1;
       display: flex;
       flex-direction: column;
-      background-color: #000000;
+      height: 100%;
+      max-height: 100%;
       position: relative;
+      background-color: #131314;
     }
 
     .viewport-content {
       display: none;
       flex: 1;
       flex-direction: column;
-      overflow-y: auto;
+      height: 100%;
+      max-height: 100%;
+      overflow: hidden; /* Blokada nadrzędna */
     }
 
     .viewport-content.active {
       display: flex;
     }
 
-    /* STRUKTURA CZATU */
+    /* KONTENER CZATU */
     .chat-container {
       display: flex;
       flex-direction: column;
       height: 100%;
+      max-height: 100%;
+      width: 100%;
     }
 
+    /* SEKCJA WIADOMOŚCI - NIEZALEŻNY SCROLL */
     .chat-messages {
       flex: 1;
-      padding: 30px;
-      overflow-y: auto;
+      padding: 24px 40px;
+      overflow-y: auto; /* Scroll pojawia się tylko tutaj */
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 24px;
+      scroll-behavior: smooth;
     }
 
+    /* STYLIZACJA WIADOMOŚCI INSPiROWANA GEMINI */
     .message {
-      max-width: 75%;
-      padding: 16px 20px;
-      border-radius: 12px;
-      font-size: 15.5px;
+      max-width: 85%;
+      padding: 12px 0; /* Wygląd czatu liniowego bez sztywnych bąbli */
+      font-size: 16px;
       line-height: 1.6;
       word-wrap: break-word;
+      display: flex;
+      flex-direction: column;
     }
 
-    .message.ai {
-      background-color: #0d1117;
-      color: #e6edf3;
-      align-self: flex-start;
-      border: 1px solid #21262d;
+    .message::before {
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #aa9c9c;
     }
 
     .message.user {
-      background-color: #f7781e;
-      color: #ffffff;
-      align-self: flex-end;
+      align-self: flex-start;
+      color: #fff;
+      background-color: #2a2b2d;
+      padding: 14px 20px;
+      border-radius: 18px;
+    }
+
+    .message.ai {
+      align-self: flex-start;
+      color: #e3e3e3;
+      width: 100%;
+      max-width: 100%;
+      border-top: 1px solid #28292a;
+      padding-top: 20px;
+    }
+
+    .message.ai::before {
+      content: "✨ XeloAI";
+      color: #74a0ff;
     }
 
     .ai-generated-image {
       max-width: 100%;
-      max-height: 450px;
-      border-radius: 8px;
-      margin-top: 12px;
-      border: 1px solid #30363d;
-      display: block;
+      max-height: 500px;
+      object-fit: contain;
+      border-radius: 12px;
+      margin-top: 14px;
+      border: 1px solid #444746;
     }
 
+    /* STABILNY I ELASTYCZNY PANEL DOLNY */
     .chat-input-area {
-      padding: 20px 30px;
-      background-color: #161b22;
-      border-top: 1px solid #21262d;
+      padding: 10px 40px 24px 40px;
+      background-color: #131314;
     }
 
     .input-wrapper {
       display: flex;
-      gap: 12px;
-      max-width: 1200px;
+      align-items: flex-end;
+      background-color: #1e1f20;
+      border-radius: 28px;
+      padding: 8px 16px 8px 24px;
+      max-width: 850px;
       margin: 0 auto;
-      width: 100%;
+      border: 1px solid transparent;
+      transition: border-color 0.2s;
     }
 
-    .chat-input-area input {
+    .input-wrapper:focus-within {
+      border-color: #4f5154;
+      background-color: #282a2c;
+    }
+
+    /* TEXTAREA ZAMIAST INPUTA - OBSŁUGA SHIFT+ENTER */
+    .chat-input-area textarea {
       flex: 1;
-      background-color: #0d1117;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 14px 18px;
-      color: #f0f3f5;
-      font-size: 15px;
+      background: none;
+      border: none;
+      resize: none;
+      max-height: 180px; /* Maksymalna wysokość pola */
+      height: 24px;      /* Początkowa wysokość */
+      padding: 4px 0;
+      color: #e3e3e3;
+      font-size: 16px;
+      line-height: 24px;
       outline: none;
-    }
-
-    .chat-input-area input:focus {
-      border-color: #f7781e;
+      font-family: inherit;
     }
 
     .chat-input-area button {
-      background-color: #f7781e;
-      color: white;
+      background: none;
       border: none;
-      border-radius: 8px;
-      padding: 14px 28px;
+      color: #74a0ff;
+      cursor: pointer;
+      padding: 4px 8px;
       font-weight: 600;
       font-size: 15px;
-      cursor: pointer;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      transition: color 0.2s;
     }
 
     .chat-input-area button:disabled {
-      background-color: #30363d;
-      color: #8b949e;
+      color: #444746;
       cursor: not-allowed;
     }
 
-    /* MODUŁY */
+    /* MODUŁY SYSTEMOWE */
     .modules-container {
       padding: 40px;
-      max-width: 1200px;
+      max-width: 900px;
       width: 100%;
       margin: 0 auto;
+      overflow-y: auto;
     }
 
     .modules-title {
-      font-size: 22px;
-      margin-bottom: 20px;
-      color: #ffffff;
+      font-size: 24px;
+      margin-bottom: 24px;
+      color: #fff;
     }
 
     .equal-grid {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
-      flex-wrap: wrap;
     }
 
     .equal-card {
-      flex: 1;
-      min-width: 280px;
-      background-color: #0d1117;
-      border: 1px solid #21262d;
-      border-radius: 8px;
+      background-color: #1e1f20;
+      border: 1px solid #3c4043;
+      border-radius: 16px;
       padding: 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: 16px;
     }
 
     .equal-card h3 {
       font-size: 18px;
-      color: #ffffff;
-      margin-bottom: 12px;
+      color: #fff;
     }
 
     .equal-card p {
-      color: #8b949e;
+      color: #c4c7c5;
       font-size: 14px;
       line-height: 1.6;
-      margin-bottom: 16px;
     }
 
     .status-badge {
       align-self: flex-start;
       font-size: 11px;
       font-weight: bold;
-      padding: 4px 8px;
-      border-radius: 4px;
-      background-color: #30363d;
-      color: #f7781e;
+      padding: 4px 10px;
+      border-radius: 100px;
+      background-color: #004a77;
+      color: #c2e7ff;
     }
 
-    /* FORMATOWANIE MARKDOWN */
-    .message.ai h1, .message.ai h2, .message.ai h3 { color: #ffffff; margin-top: 12px; margin-bottom: 6px; font-weight: 600; }
-    .message.ai code { background-color: #21262d; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #ff7b72; }
-    .message.ai pre { background-color: #161b22; border: 1px solid #30363d; padding: 12px; border-radius: 6px; margin: 10px 0; overflow-x: auto; }
-    .message.ai pre code { background: none; padding: 0; color: #e6edf3; }
+    /* STYLE DLA FORMATOWANIA TEKSTU AI */
+    .message.ai h1, .message.ai h2, .message.ai h3 { color: #fff; margin: 16px 0 8px 0; }
+    .message.ai code { background-color: #2d2f31; padding: 2px 6px; border-radius: 6px; font-family: monospace; color: #ffb4ab; font-size: 14px; }
+    .message.ai pre { background-color: #1e1f20; border: 1px solid #3c4043; padding: 16px; border-radius: 12px; margin: 12px 0; overflow-x: auto; }
+    .message.ai pre code { background: none; padding: 0; color: #e3e3e3; }
+    .message.ai p { margin-bottom: 8px; }
+    .message.ai ul, .message.ai ol { margin-left: 24px; margin-bottom: 8px; }
+
+    /* Paski przewijania (Scrollbars) */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #131314; }
+    ::-webkit-scrollbar-thumb { background: #3c4043; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #4f5154; }
   </style>
 </head>
 <body>
@@ -301,15 +339,14 @@
     <div class="sidebar-header">
       <span style="font-size: 22px;">⚙️</span>
       <div>
-        <h2>XeloAI</h2>
-        <span style="font-size: 11px; color: #8b949e; display: block;">v1.3 Workspace</span>
+        <h2>XeloAI Workspace</h2>
       </div>
       <div class="status-dot"></div>
     </div>
 
     <div class="sidebar-menu">
-      <button id="menu-chatView" class="menu-button active" onclick="switchView('chatView', this)">🤖 Inteligentny Czat AI</button>
-      <button id="menu-imageView" class="menu-button" onclick="switchView('imageView', this)">🎨 Generator Obrazów AI</button>
+      <button id="menu-chatView" class="menu-button active" onclick="switchView('chatView', this)">🤖 Inteligentny Czat</button>
+      <button id="menu-imageView" class="menu-button" onclick="switchView('imageView', this)">🎨 Generator Obrazów</button>
       <button id="menu-modulesView" class="menu-button" onclick="switchView('modulesView', this)">📦 Moduły Systemu</button>
     </div>
 
@@ -325,7 +362,7 @@
         <div class="chat-messages" id="chatMessages"></div>
         <div class="chat-input-area">
           <div class="input-wrapper">
-            <input type="text" id="userInput" placeholder="Zadaj pytanie sztucznej inteligencji...">
+            <textarea id="userInput" placeholder="Zadaj pytanie XeloAI..." rows="1" oninput="autoGrow(this)"></textarea>
             <button id="sendBtn" onclick="sendMessage()">Wyślij</button>
           </div>
         </div>
@@ -336,178 +373,17 @@
       <div class="chat-container">
         <div class="chat-messages" id="imageChatMessages">
           <div class="message ai">
-            Witaj w dedykowanym czacie graficznym! Wpisz poniżej opis obrazu, który chcesz wygenerować, a potężna sieć neuronowa Flux wklei grafikę bezpośrednio do historii tej rozmowy.
+            Wpisz poniżej opis obrazu, który chcesz wygenerować, a model Flux przygotuje grafikę bezpośrednio w tym oknie.
           </div>
         </div>
         <div class="chat-input-area">
           <div class="input-wrapper">
-            <input type="text" id="imageInput" placeholder="Opisz obraz (np. 'czarny kot pijący kawę, styl cyberpunk')...">
-            <button id="imageSendBtn" onclick="sendImageRequest()">Generuj obraz</button>
+            <textarea id="imageInput" placeholder="Opisz obraz..." rows="1" oninput="autoGrow(this)"></textarea>
+            <button id="imageSendBtn" onclick="sendImageRequest()">Generuj</button>
           </div>
         </div>
       </div>
     </div>
 
     <div id="modulesView" class="viewport-content">
-      <div class="modules-container">
-        <h2 class="modules-title">Dostępne Moduły Systemowe</h2>
-        <div class="equal-grid">
-          <div class="equal-card">
-            <div>
-              <h3>🤖 Inteligentny Czat AI</h3>
-              <p>Zintegrowany z silnikiem Gemini 2.5 Flash. Odpowiada na pytania i analizuje dane.</p>
-            </div>
-            <span class="status-badge">STATUS: AKTYWNY</span>
-          </div>
-          <div class="equal-card">
-            <div>
-              <h3>🎨 Generator Obrazów</h3>
-              <p>Niezależny czat graficzny generujący obrazy w locie przy użyciu sieci Flux.</p>
-            </div>
-            <span class="status-badge">STATUS: AKTYWNY</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const serverUrl = 'https://ewewerbanEwewerban--60e9fcc8633011f1b4d31607ee4eb77e.web.val.run';
-    const initialWelcomeMessage = `Witaj w panelu Xelo AI! Silnik został zaktualizowany do stabilnej architektury Gemini 2.5 Flash. W czym mogę pomóc?`;
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const savedChat = localStorage.getItem("xelo_chat_history");
-      const container = document.getElementById('chatMessages');
-      container.innerHTML = savedChat ? savedChat : `<div class="message ai">${initialWelcomeMessage}</div>`;
-      container.scrollTop = container.scrollHeight;
-
-      const savedImageChat = localStorage.getItem("xelo_image_chat_history");
-      if (savedImageChat) {
-        document.getElementById('imageChatMessages').innerHTML = savedImageChat;
-      }
-      document.getElementById('imageChatMessages').scrollTop = document.getElementById('imageChatMessages').scrollHeight;
-
-      const savedTab = localStorage.getItem("xelo_active_tab") || "chatView";
-      const activeBtn = document.getElementById(`menu-${savedTab}`);
-      if (activeBtn) switchView(savedTab, activeBtn);
-    });
-
-    function clearHistory() {
-      if (confirm("Czy na pewno chcesz wyczyścić całą historię czatów?")) {
-        localStorage.removeItem("xelo_chat_history");
-        localStorage.removeItem("xelo_image_chat_history");
-        document.getElementById('chatMessages').innerHTML = `<div class="message ai">${initialWelcomeMessage}</div>`;
-        document.getElementById('imageChatMessages').innerHTML = `<div class="message ai">Witaj w dedykowanym czacie graficznym! Wpisz poniżej opis obrazu, który chcesz wygenerować, a potężna sieć neuronowa Flux wklei grafikę bezpośrednio do historii tej rozmowy.</div>`;
-      }
-    }
-
-    function parseMarkdown(text) {
-      let html = text;
-      html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-      html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
-      html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
-      html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
-      html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
-      html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-      html = html.replace(/\n/g, '<br>');
-      return html;
-    }
-
-    function switchView(viewId, buttonEl) {
-      document.querySelectorAll('.viewport-content').forEach(v => v.classList.remove('active'));
-      document.querySelectorAll('.menu-button').forEach(b => b.classList.remove('active'));
-      
-      const target = document.getElementById(viewId);
-      if (target) target.classList.add('active');
-      buttonEl.classList.add('active');
-      localStorage.setItem("xelo_active_tab", viewId);
-    }
-
-    // CZAT TEKSTOWY (Gemini)
-    async function sendMessage() {
-      const inputEl = document.getElementById('userInput');
-      const container = document.getElementById('chatMessages');
-      const text = inputEl.value.trim();
-      if (!text) return;
-
-      const userDiv = document.createElement('div');
-      userDiv.className = 'message user';
-      userDiv.textContent = text;
-      container.appendChild(userDiv);
-      inputEl.value = '';
-
-      const aiDiv = document.createElement('div');
-      aiDiv.className = 'message ai';
-      aiDiv.textContent = 'XeloAI generuje odpowiedź...';
-      container.appendChild(aiDiv);
-      container.scrollTop = container.scrollHeight;
-
-      try {
-        const response = await fetch(serverUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'text', prompt: text })
-        });
-        const replyText = await response.text();
-        aiDiv.innerHTML = parseMarkdown(replyText);
-        localStorage.setItem("xelo_chat_history", container.innerHTML);
-      } catch (error) {
-        aiDiv.textContent = 'Błąd połączenia z serwerem.';
-      }
-      container.scrollTop = container.scrollHeight;
-    }
-
-    // CZAT GRAFICZNY (Flux — Działa przez czysty tekst URL)
-    async function sendImageRequest() {
-      const inputEl = document.getElementById('imageInput');
-      const container = document.getElementById('imageChatMessages');
-      const prompt = inputEl.value.trim();
-      if (!prompt) return;
-
-      const btn = document.getElementById('imageSendBtn');
-
-      const userDiv = document.createElement('div');
-      userDiv.className = 'message user';
-      userDiv.textContent = prompt;
-      container.appendChild(userDiv);
-      inputEl.value = '';
-
-      const aiDiv = document.createElement('div');
-      aiDiv.className = 'message ai';
-      aiDiv.innerHTML = `🎨 <em>Generuję obraz dla: "${prompt}"... Proszę czekać...</em>`;
-      container.appendChild(aiDiv);
-      container.scrollTop = container.scrollHeight;
-
-      btn.disabled = true;
-
-      try {
-        const response = await fetch(serverUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'image', prompt: prompt })
-        });
-
-        if (!response.ok) throw new Error();
-
-        // Odbieramy bezpośredni, bezpieczny link tekstowy z Val Town
-        const imageUrl = await response.text();
-
-        // Wstrzykujemy link tekstowy bezpośrednio do tagu img
-        aiDiv.innerHTML = `<div style="margin-bottom: 8px;">Oto Twój wygenerowany obraz:</div><img class="ai-generated-image" src="${imageUrl}" alt="${prompt}">`;
-        
-        // Zapisujemy stan do pamięci podręcznej – zadziała zawsze, również po odświeżeniu strony!
-        localStorage.setItem("xelo_image_chat_history", container.innerHTML);
-
-      } catch (error) {
-        aiDiv.innerHTML = `<span style="color: #ff7b72;">❌ Serwer nie odpowiedział poprawnie. Spróbuj ponownie.</span>`;
-      } finally {
-        btn.disabled = false;
-        container.scrollTop = container.scrollHeight;
-      }
-    }
-
-    document.getElementById('userInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
-    document.getElementById('imageInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') sendImageRequest(); });
-  </script>
-</body>
-</html>
+      <div class="modules-
