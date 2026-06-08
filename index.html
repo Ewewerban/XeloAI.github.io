@@ -1,92 +1,297 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xelo AI</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="logo_xelo_ai.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XeloAI Browser Ecosystem</title>
+  <style>
+    /* Reset i podstawowe style nowoczesnego Dark Mode */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #090d10;
+      color: #f0f3f5;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* KONTENER BOCZNEGO PANELU (SIDEBAR) - ASYSTENT XELOAI */
+    .sidebar-ai {
+      width: 380px;
+      background-color: #0d1117;
+      border-right: 1px solid #21262d;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      transition: width 0.3s ease;
+      z-index: 10;
+    }
+
+    /* Nagłówek panela AI */
+    .sidebar-header {
+      padding: 16px;
+      background-color: #161b22;
+      border-bottom: 1px solid #21262d;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-header img {
+      width: 32px;
+      height: 32px;
+    }
+
+    .sidebar-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #2ea44f;
+      border-radius: 50%;
+      margin-left: auto;
+    }
+
+    /* Obszar z wiadomościami */
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Style dymków wiadomości */
+    .message {
+      max-width: 85%;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .message.ai {
+      background-color: #1f242c;
+      color: #e6edf3;
+      align-self: flex-start;
+      border: 1px solid #30363d;
+    }
+
+    .message.user {
+      background-color: #f7781e;
+      color: #ffffff;
+      align-self: flex-end;
+    }
+
+    /* Dolny panel wpisywania wiadomości */
+    .chat-input-area {
+      padding: 16px;
+      background-color: #161b22;
+      border-top: 1px solid #21262d;
+    }
+
+    .input-wrapper {
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      background-color: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 10px 12px;
+      color: #f0f3f5;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .chat-input-area input:focus {
+      border-color: #f7781e;
+    }
+
+    .chat-input-area button {
+      background-color: #f7781e;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .chat-input-area button:hover {
+      background-color: #e06510;
+    }
+
+    /* GŁÓWNY OBSZAR STRONY (SYMULACJA PRZEGLĄDARKI XELOBROWSER) */
+    .main-browser-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: #090d10;
+    }
+
+    /* Pasek adresu wirtualnej przeglądarki */
+    .browser-navbar {
+      background-color: #161b22;
+      padding: 10px 16px;
+      border-bottom: 1px solid #21262d;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .browser-search-bar {
+      flex: 1;
+      background-color: #21262d;
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 13px;
+      color: #8b949e;
+      border: 1px solid #30363d;
+    }
+
+    /* Ekran główny przeglądarki */
+    .browser-viewport {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .browser-viewport h1 {
+      font-size: 32px;
+      margin-bottom: 12px;
+      color: #f0f3f5;
+    }
+
+    .browser-viewport p {
+      color: #8b949e;
+      max-width: 500px;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* Responsywność - na małych ekranach sidebar zajmuje cały ekran */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      .sidebar-ai {
+        width: 100%;
+        height: 60%;
+      }
+      .main-browser-content {
+        height: 40%;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <div class="chat-container">
-        <div class="chat-header">
-            <div class="header-main">
-                <img src="logo_xelo_ai.png" alt="Xelo AI Logo" class="logo">
-                <div>
-                    <h2>Xelo AI</h2>
-                    <p class="powered-by">powered by xelo node server</p>
-                </div>
-            </div>
-            <div class="status-dot" id="statusDot"></div>
-        </div>
-
-        <div class="chat-box" id="chatBox">
-            <div class="message bot-message">
-                Witaj w Xelo AI! Bezpieczna, uproszczona architektura tekstowa została pomyślnie wdrożona. Serwer działa bez limitów i kolejek. O co chcesz zapytać?
-            </div>
-        </div>
-
-        <div class="input-area">
-            <input type="text" id="userInput" placeholder="Zadaj dowolne pytanie..." onkeydown="if(event.key === 'Enter') sendMessage()">
-            <button id="sendBtn" onclick="sendMessage()">Wyślij</button>
-        </div>
+  <div class="sidebar-ai">
+    <div class="sidebar-header">
+      <img src="https://img.icons8.com/fluent/120/000000/artificial-intelligence.png" alt="XeloAI Logo">
+      <div>
+        <h2>Xelo AI</h2>
+        <span style="font-size: 11px; color: #8b949e;">powered by val town</span>
+      </div>
+      <div class="status-dot"></div>
     </div>
 
-    <script>
-        // Twój bezpośredni URL serwera na platformie Val Town
-        const MY_SERVER_URL = "https://ewewerbanEwewerban--60e9fcc8633011f1b4d31607ee4eb77e.web.val.run";
+    <div class="chat-messages" id="chatMessages">
+      <div class="message ai">
+        Witaj w Xelo AI! Bezpieczna, uproszczona architektura tekstowa została pomyślnie wdrożona. Serwer działa bez limitów i kolejek. O co chcesz zapytać?
+      </div>
+    </div>
 
-        async function sendMessage() {
-            const inputField = document.getElementById('userInput');
-            const messageText = inputField.value.trim();
-            if (messageText === '') return;
+    <div class="chat-input-area">
+      <div class="input-wrapper">
+        <input type="text" id="userInput" placeholder="Zadaj dowolne pytanie..." onkeydown="if(event.key === 'Enter') sendMessage()">
+        <button onclick="sendMessage()">Wyślij</button>
+      </div>
+    </div>
+  </div>
 
-            const chatBox = document.getElementById('chatBox');
-            const statusDot = document.getElementById('statusDot');
-            const sendBtn = document.getElementById('sendBtn');
+  <div class="main-browser-content">
+    <div class="browser-navbar">
+      <div style="display: flex; gap: 6px;">
+        <span style="color: #8b949e; cursor: pointer;">◀</span>
+        <span style="color: #8b949e; cursor: pointer;">▶</span>
+        <span style="color: #8b949e; cursor: pointer;">↻</span>
+      </div>
+      <div class="browser-search-bar">https://xelobrowser.ecosystem/home</div>
+    </div>
+    
+    <div class="browser-viewport">
+      <h1>Silnik XeloBrowser ⚙️</h1>
+      <p>
+        To jest główny obszar roboczy przeglądarki. Zgodnie z planami w pliku README, boczny panel asystenta XeloAI po lewej stronie ma w przyszłości automatycznie podsumowywać przeglądane tutaj witryny oraz pomagać w nawigacji.
+      </p>
+    </div>
+  </div>
 
-            // Pokazanie wiadomości użytkownika
-            const userDiv = document.createElement('div');
-            userDiv.className = 'message user-message';
-            userDiv.textContent = messageText;
-            chatBox.appendChild(userDiv);
-            inputField.value = '';
-            chatBox.scrollTop = chatBox.scrollHeight;
+  <script>
+    async function sendMessage() {
+      const inputEl = document.getElementById('userInput');
+      const messagesContainer = document.getElementById('chatMessages');
+      const text = inputEl.value.trim();
 
-            // Start animacji myślenia bota
-            statusDot.classList.add('typing');
-            sendBtn.disabled = true;
+      if (!text) return;
 
-            const botDiv = document.createElement('div');
-            botDiv.className = 'message bot-message';
-            botDiv.textContent = "...";
-            chatBox.appendChild(botDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
+      // 1. Dodaj wiadomość użytkownika do sidebaru
+      const userDiv = document.createElement('div');
+      userDiv.className = 'message user';
+      userDiv.textContent = text;
+      messagesContainer.appendChild(userDiv);
+      
+      inputEl.value = '';
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-            try {
-                // Wysyłamy dane jako czysty tekst bez struktur obiektowych JSON
-                const response = await fetch(MY_SERVER_URL, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "text/plain; charset=utf-8"
-                    },
-                    body: messageText
-                });
+      // 2. Dodaj tymczasowy dymek oczekiwania dla AI
+      const aiDiv = document.createElement('div');
+      aiDiv.className = 'message ai';
+      aiDiv.textContent = 'Generowanie odpowiedzi...';
+      messagesContainer.appendChild(aiDiv);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-                const replyText = await response.text();
-                botDiv.textContent = replyText;
+      try {
+        // Podmień adres URL na adres swojego działającego skryptu w Val Town!
+        const response = await fetch('https://ewewerbanEwewerban--60e9fcc8633011f1b4d31607ee4eb77e.web.val.run', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain; charset=utf-8'
+          },
+          body: text
+        });
 
-            } catch (e) {
-                console.error(e);
-                botDiv.textContent = "Wystąpił błąd komunikacji. Sprawdź stan serwera.";
-            }
+        const replyText = await response.text();
+        
+        // 3. Wklej realną odpowiedź (Plain Text) z Gemini do dymka
+        aiDiv.textContent = replyText;
 
-            // Przywrócenie interfejsu
-            statusDot.classList.remove('typing');
-            sendBtn.disabled = false;
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-    </script>
+      } catch (error) {
+        aiDiv.textContent = 'Błąd połączenia z serwerem AI.';
+      }
+
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+  </script>
 </body>
 </html>
