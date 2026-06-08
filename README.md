@@ -25,3 +25,60 @@
 + ⚡ Lightweight & Fast – built using clean HTML, CSS, and pure Javascript with absolute zero dependencies.
 + 📱 Fully Responsive – flawlessly scales and adapts to smartphones, tablets, and desktop computers.
 + 🚀 GitHub Pages Ready – fully optimized to be deployed and hosted for free, running 100% serverless.
+
+```
+
+## 📰 Aktualności (News)
+
+Poniżej znajdziesz najnowsze informacje dotyczące rozwoju projektu XeloAI oraz ekosystemu XeloBrowser.
+
+<table width="100%">
+  <tr>
+    <td width="50%" valign="top" style="border: 1px solid #30363d; border-radius: 6px; padding: 16px; background-color: #0d1117;">
+      <p align="center">
+        <img src="https://img.shields.io/badge/Status-Aktywne-orange?style=for-the-badge" alt="Status">
+      </p>
+      <h3>🚀 Migracja na Google Gemini zakończona!</h3>
+      <p style="font-size: 14px; color: #8b949e;">
+        Serwer Node na platformie Val Town został pomyślnie przepisany na bezpośrednią, natywną obsługę modeli <strong>Gemini 1.5 Flash</strong>. Dzięki temu czat zyskał stuprocentową stabilność, błyskawiczny czas odpowiedzi oraz odporność na limity IP czy przeciążenia zewnętrznych bramek.
+      </p>
+      <hr style="border: 0; border-top: 1px solid #21262d; margin: 12px 0;">
+      <p style="font-size: 12px; color: #58a6ff;">📅 <i>Czerwiec 2026</i></p>
+    </td>
+    <td width="50%" valign="top" style="border: 1px solid #30363d; border-radius: 6px; padding: 16px; background-color: #0d1117;">
+      <p align="center">
+        <img src="https://img.shields.io/badge/Wdrożenie-Front--end-blue?style=for-the-badge" alt="Wdrożenie">
+      </p>
+      <h3>✨ Nowa architektura tekstowa</h3>
+      <p style="font-size: 14px; color: #8b949e;">
+        Front-end aplikacji działający na <strong>GitHub Pages</strong> przeszedł gruntowne uproszczenie kodu. Zrezygnowaliśmy ze skomplikowanego formatowania obiektów JSON na rzecz bezpiecznego, bezpośredniego przesyłania surowego strumienia tekstu (Plain Text), co całkowicie wyeliminowało problemy z CORS w przeglądarkach.
+      </p>
+      <hr style="border: 0; border-top: 1px solid #21262d; margin: 12px 0;">
+      <p style="font-size: 12px; color: #58a6ff;">📅 <i>Czerwiec 2026</i></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top" style="border: 1px solid #30363d; border-radius: 6px; padding: 16px; background-color: #0d1117;">
+      <p align="center">
+        <img src="https://img.shields.io/badge/Plany-XeloBrowser-purple?style=for-the-badge" alt="Plany">
+      </p>
+      <h3>⚙️ Integracja z ekosystemem</h3>
+      <p style="font-size: 14px; color: #8b949e;">
+        Rozpoczynamy prace nad głębszą integracją asystenta XeloAI bezpośrednio z silnikiem przeglądarki XeloBrowser. W planach jest stworzenie bocznego panelu (sidebar), automatyczne podsumowywanie czytanych artykułów oraz inteligentne zarządzanie kartami za pomocą komend głosowych.
+      </p>
+      <hr style="border: 0; border-top: 1px solid #21262d; margin: 12px 0;">
+      <p style="font-size: 12px; color: #58a6ff;">📅 <i>Wkrótce</i></p>
+    </td>
+    <td width="50%" valign="top" style="border: 1px solid #30363d; border-radius: 6px; padding: 16px; background-color: #0d1117;">
+      <p align="center">
+        <img src="https://img.shields.io/badge/Społeczność-Open--Source-green?style=for-the-badge" alt="Społeczność">
+      </p>
+      <h3>🤝 Zapraszamy do współtworzenia</h3>
+      <p style="font-size: 14px; color: #8b949e;">
+        Projekt staje się w pełni otwarty na kontrybucje społeczności! Jeśli masz pomysł na ulepszenie wyglądu kafelków, optymalizację kodu serwerowego w Val Town lub chcesz dodać nowe funkcjonalności do asystenta – stwórz Pull Request lub zgłoś sugestię w sekcji Issues.
+      </p>
+      <hr style="border: 0; border-top: 1px solid #21262d; margin: 12px 0;">
+      <p style="font-size: 12px; color: #58a6ff;">📅 <i>Stałe</i></p>
+    </td>
+  </tr>
+</table>
