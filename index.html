@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XeloAI</title>
+  <title>XeloAI Workspace</title>
   <style>
     * {
       box-sizing: border-box;
@@ -184,7 +184,7 @@
     }
 
     .message.user {
-      background-color: #f7781e; /* Oryginalny pomarańczowy */
+      background-color: #f7781e;
       color: #ffffff;
       align-self: flex-end;
     }
@@ -349,7 +349,7 @@
       <span style="font-size: 22px;">⚙️</span>
       <div>
         <h2>XeloAI</h2>
-        <span style="font-size: 11px; color: #8b949e; display: block;">Workspace v1.4</span>
+        <span style="font-size: 11px; color: #8b949e; display: block;">Workspace v1.5</span>
       </div>
       <div class="status-dot"></div>
     </div>
@@ -372,7 +372,7 @@
         <div class="chat-messages" id="chatMessages"></div>
         <div class="chat-input-area">
           <div class="input-wrapper">
-            <textarea id="userInput" placeholder="Zadaj pytanie sztucznej inteligencji... (Enter aby wysłać, Shift+Enter nowa linia)"></textarea>
+            <textarea id="userInput" placeholder="Zadaj pytanie sztucznej inteligencji... (Enter wysyła, Shift+Enter nowa linia)"></textarea>
             <button id="sendBtn" onclick="sendMessage()">Wyślij</button>
           </div>
         </div>
@@ -388,7 +388,7 @@
         </div>
         <div class="chat-input-area">
           <div class="input-wrapper">
-            <textarea id="imageInput" placeholder="Opisz obraz... (Enter aby wygenerować, Shift+Enter nowa linia)"></textarea>
+            <textarea id="imageInput" placeholder="Opisz obraz... (Enter generuje, Shift+Enter nowa linia)"></textarea>
             <button id="imageSendBtn" onclick="sendImageRequest()">Generuj</button>
           </div>
         </div>
@@ -424,38 +424,32 @@
     const initialWelcomeMessage = `Witaj w panelu Xelo AI! Silnik został zaktualizowany do stabilnej architektury Gemini 2.5 Flash. W czym mogę pomóc?`;
 
     document.addEventListener("DOMContentLoaded", () => {
-      // Ładowanie historii tekstowej
       const savedChat = localStorage.getItem("xelo_chat_history");
       const container = document.getElementById('chatMessages');
       container.innerHTML = savedChat ? savedChat : `<div class="message ai">${initialWelcomeMessage}</div>`;
       container.scrollTop = container.scrollHeight;
 
-      // Ładowanie historii graficznej
       const savedImageChat = localStorage.getItem("xelo_image_chat_history");
       if (savedImageChat) {
         document.getElementById('imageChatMessages').innerHTML = savedImageChat;
       }
       document.getElementById('imageChatMessages').scrollTop = document.getElementById('imageChatMessages').scrollHeight;
 
-      // Przywracanie aktywnej zakładki
       const savedTab = localStorage.getItem("xelo_active_tab") || "chatView";
       const activeBtn = document.getElementById(`menu-${savedTab}`);
       if (activeBtn) switchView(savedTab, activeBtn);
 
-      // Spięcie obsługi wielowierszowej (Shift+Enter / Enter) dla pól textarea
       setupTextareaKeydown('userInput', sendMessage);
       setupTextareaKeydown('imageInput', sendImageRequest);
     });
 
-    // Funkcja zarządzająca zachowaniem klawiszy Enter i Shift+Enter
     function setupTextareaKeydown(id, submitFunction) {
       const textarea = document.getElementById(id);
       textarea.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault(); // Blokada nowej linii
-          submitFunction();   // Wysyłanie formularza
+          e.preventDefault();
+          submitFunction();
         }
-        // Jeśli kliknięto Shift + Enter, pozwalamy przeglądarce zrobić nową linię
         setTimeout(() => autoResizeTextarea(textarea), 10);
       });
       textarea.addEventListener('input', function() {
@@ -463,7 +457,6 @@
       });
     }
 
-    // Automatyczne dopasowywanie wysokości pola tekstowego do zawartości
     function autoResizeTextarea(textarea) {
       textarea.style.height = 'auto';
       textarea.style.height = (textarea.scrollHeight) + 'px';
@@ -500,24 +493,20 @@
       localStorage.setItem("xelo_active_tab", viewId);
     }
 
-    // OBSŁUGA CZATU TEKSTOWEGO (Z animacją pisania kropek)
     async function sendMessage() {
       const inputEl = document.getElementById('userInput');
       const container = document.getElementById('chatMessages');
       const text = inputEl.value.trim();
       if (!text) return;
 
-      // Dodanie wiadomości użytkownika
       const userDiv = document.createElement('div');
       userDiv.className = 'message user';
       userDiv.textContent = text;
       container.appendChild(userDiv);
       
-      // Reset pola textarea do bazowej wysokości
       inputEl.value = '';
       inputEl.style.height = '50px';
 
-      // Dodanie animacji pisania AI
       const aiDiv = document.createElement('div');
       aiDiv.className = 'message ai';
       aiDiv.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
@@ -532,7 +521,6 @@
         });
         const replyText = await response.text();
         
-        // Zastąpienie animacji gotowym tekstem od AI
         aiDiv.innerHTML = parseMarkdown(replyText);
         localStorage.setItem("xelo_chat_history", container.innerHTML);
       } catch (error) {
@@ -541,7 +529,6 @@
       container.scrollTop = container.scrollHeight;
     }
 
-    // OBSŁUGA CZATU GRAFICZNEGO (Z animacją pisania kropek)
     async function sendImageRequest() {
       const inputEl = document.getElementById('imageInput');
       const container = document.getElementById('imageChatMessages');
@@ -550,7 +537,6 @@
 
       const btn = document.getElementById('imageSendBtn');
 
-      // Dodanie wiadomości użytkownika
       const userDiv = document.createElement('div');
       userDiv.className = 'message user';
       userDiv.textContent = prompt;
@@ -559,7 +545,6 @@
       inputEl.value = '';
       inputEl.style.height = '50px';
 
-      // Dodanie animacji oczekiwania
       const aiDiv = document.createElement('div');
       aiDiv.className = 'message ai';
       aiDiv.innerHTML = `<div style="margin-bottom: 8px;">🎨 Generowanie obrazu graficznego...</div><div class="typing-indicator"><span></span><span></span><span></span></div>`;
@@ -577,10 +562,8 @@
 
         if (!response.ok) throw new Error();
 
-        // Odbieramy czysty, wygenerowany link tekstowy URL z Val Town
         const imageUrl = await response.text();
 
-        // Wklejamy go jako źródło tagu img
         aiDiv.innerHTML = `<div style="margin-bottom: 8px;">Oto Twój wygenerowany obraz:</div><img class="ai-generated-image" src="${imageUrl}" alt="${prompt}">`;
         localStorage.setItem("xelo_image_chat_history", container.innerHTML);
 
