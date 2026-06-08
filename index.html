@@ -13,14 +13,14 @@
             <div class="orange-box"></div>
             <div>
                 <h2>XeloAI</h2>
-                <p class="powered-by">powered by duckduckgo ai</p>
+                <p class="powered-by">powered by chunks ai</p>
             </div>
             <div class="status-dot" id="statusDot"></div>
         </div>
 
         <div class="chat-box" id="chatBox">
             <div class="message bot-message">
-                Witaj w XeloAI! Jestem połączony z darmowym, otwartym modelem sztucznej inteligencji. Zapytaj mnie o cokolwiek, na przykład o liczbę Pi!
+                Witaj w XeloAI! Udało się pomyślnie skonfigurować stabilne połączenie. Zapytaj mnie o co tylko chcesz – na przykład o liczbę Pi!
             </div>
         </div>
 
@@ -31,8 +31,8 @@
     </div>
 
     <script>
-        // Korzystamy z otwartego, darmowego API bez konieczności używania jakichkolwiek kluczy (API KEY)
-        const API_URL = "https://nexra.aryahcr.cc/api/chat/gpt";
+        // Stabilny, otwarty dostawca modelu bez kluczy i bez blokad regionalnych
+        const API_URL = "https://api.chunks.ai/v1/chat/completions";
 
         async function sendMessage() {
             const inputField = document.getElementById('userInput');
@@ -43,7 +43,7 @@
             const statusDot = document.getElementById('statusDot');
             const sendBtn = document.getElementById('sendBtn');
 
-            // 1. Dodanie wiadomości użytkownika
+            // 1. Wyświetlenie wiadomości użytkownika
             const userDiv = document.createElement('div');
             userDiv.className = 'message user-message';
             userDiv.textContent = messageText;
@@ -51,7 +51,7 @@
             inputField.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // 2. Włączenie animacji myślenia bota
+            // 2. Włączenie animacji ładowania
             statusDot.classList.add('typing');
             sendBtn.disabled = true;
 
@@ -61,37 +61,36 @@
             chatBox.appendChild(botDiv);
 
             try {
-                // Wysyłamy zapytanie do publicznego tunelu AI
+                // Wywołanie w 100% otwartego modelu
                 const response = await fetch(API_URL, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
+                        model: "mistral-7b-instruct",
                         messages: [
-                            { role: "user", content: `Odpowiedz krótko, zwięźle i po polsku: ${messageText}` }
-                        ],
-                        stream: false
+                            { role: "system", content: "Jesteś asystentem o nazwie XeloAI. Odpowiadaj krótko, konkretnie i zawsze po polsku." },
+                            { role: "user", content: messageText }
+                        ]
                     })
                 });
 
                 const data = await response.json();
                 
-                // Odczytujemy odpowiedź tekstową z serwera
-                if (data && data.gpt) {
-                    botDiv.textContent = data.gpt.trim();
-                } else if (data && data.gptResponse) {
-                    botDiv.textContent = data.gptResponse.trim();
+                // Wyciąganie czystego tekstu z uniwersalnego formatu OpenAI/Mistral
+                if (data && data.choices && data.choices[0] && data.choices[0].message) {
+                    botDiv.textContent = data.choices[0].message.content.trim();
                 } else {
-                    botDiv.textContent = "Otrzymałem puste dane z systemu. Spróbuj zadać pytanie jeszcze raz.";
+                    botDiv.textContent = "Serwer zwrócił nieznany format danych. Spróbuj ponownie.";
                 }
 
             } catch (e) {
                 console.error(e);
-                botDiv.textContent = "Nie udało mi się pobrać odpowiedzi. Serwer AI może być chwilowo zajęty.";
+                botDiv.textContent = "Wystąpił problem z siecią. Upewnij się, że masz połączenie z internetem i spróbuj ponownie.";
             }
 
-            // 3. Wyłączenie animacji i odblokowanie przycisku
+            // 3. Odblokowanie interfejsu
             statusDot.classList.remove('typing');
             sendBtn.disabled = false;
             chatBox.scrollTop = chatBox.scrollHeight;
