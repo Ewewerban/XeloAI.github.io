@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XeloAI Workspace</title>
+  <title>XeloAI</title>
   <style>
     * {
       box-sizing: border-box;
@@ -124,7 +124,7 @@
       border-color: #ff7b72;
     }
 
-    /* GŁÓWNY PANEL ROBOCZY - CAŁKOWITY ZAKAZ ROZCIĄGANIA STRONY */
+    /* GŁÓWNY PANEL ROBOCZY */
     .main-content-area {
       flex: 1;
       display: flex;
@@ -157,7 +157,7 @@
       max-height: 100%;
     }
 
-    /* OKNO WIADOMOŚCI - NIEZALEŻNE PRZEWIJANIE DO GÓRY I DO DOŁU */
+    /* OKNO WIADOMOŚCI */
     .chat-messages {
       flex: 1;
       padding: 30px;
@@ -198,7 +198,7 @@
       display: block;
     }
 
-    /* STABILNY PANEL DOLNY Z TEXTAREA */
+    /* PANEL DOLNY */
     .chat-input-area {
       padding: 20px 30px;
       background-color: #161b22;
@@ -214,7 +214,6 @@
       width: 100%;
     }
 
-    /* ELASTYCZNE POLE TEKSTOWE OBSŁUGUJĄCE SHIFT+ENTER */
     .chat-input-area textarea {
       flex: 1;
       background-color: #0d1117;
@@ -254,7 +253,7 @@
       cursor: not-allowed;
     }
 
-    /* ANIMACJA PISANIA AI (TRZY PULSUJĄCE KROPKI) */
+    /* ANIMACJA PISANIA AI */
     .typing-indicator {
       display: flex;
       align-items: center;
@@ -335,7 +334,7 @@
       color: #f7781e;
     }
 
-    /* FORMATOWANIE MARKDOWN DLA ODPOWIEDZI AI */
+    /* FORMATOWANIE MARKDOWN */
     .message.ai h1, .message.ai h2, .message.ai h3 { color: #ffffff; margin-top: 12px; margin-bottom: 6px; font-weight: 600; }
     .message.ai code { background-color: #21262d; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #ff7b72; }
     .message.ai pre { background-color: #161b22; border: 1px solid #30363d; padding: 12px; border-radius: 6px; margin: 10px 0; overflow-x: auto; }
@@ -349,7 +348,7 @@
       <span style="font-size: 22px;">⚙️</span>
       <div>
         <h2>XeloAI</h2>
-        <span style="font-size: 11px; color: #8b949e; display: block;">Workspace v1.5</span>
+        <span style="font-size: 11px; color: #8b949e; display: block;">Workspace v1.6</span>
       </div>
       <div class="status-dot"></div>
     </div>
@@ -388,192 +387,4 @@
         </div>
         <div class="chat-input-area">
           <div class="input-wrapper">
-            <textarea id="imageInput" placeholder="Opisz obraz... (Enter generuje, Shift+Enter nowa linia)"></textarea>
-            <button id="imageSendBtn" onclick="sendImageRequest()">Generuj</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="modulesView" class="viewport-content">
-      <div class="modules-container">
-        <h2 class="modules-title">Dostępne Moduły Systemowe</h2>
-        <div class="equal-grid">
-          <div class="equal-card">
-            <div>
-              <h3>🤖 Inteligentny Czat AI</h3>
-              <p>Zintegrowany z silnikiem Gemini 2.5 Flash. Odpowiada błyskawicznie na pytania programistyczne i ogólne.</p>
-            </div>
-            <span class="status-badge">STATUS: AKTYWNY</span>
-          </div>
-          <div class="equal-card">
-            <div>
-              <h3>🎨 Generator Obrazów</h3>
-              <p>Autonomiczny kreator graficzny zasilany architekturą Flux. Generuje obrazy bezpośrednio jako linki do okna czatu.</p>
-            </div>
-            <span class="status-badge">STATUS: AKTYWNY</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <script>
-    const serverUrl = 'https://ewewerbanEwewerban--60e9fcc8633011f1b4d31607ee4eb77e.web.val.run';
-    const initialWelcomeMessage = `Witaj w panelu Xelo AI! Silnik został zaktualizowany do stabilnej architektury Gemini 2.5 Flash. W czym mogę pomóc?`;
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const savedChat = localStorage.getItem("xelo_chat_history");
-      const container = document.getElementById('chatMessages');
-      container.innerHTML = savedChat ? savedChat : `<div class="message ai">${initialWelcomeMessage}</div>`;
-      container.scrollTop = container.scrollHeight;
-
-      const savedImageChat = localStorage.getItem("xelo_image_chat_history");
-      if (savedImageChat) {
-        document.getElementById('imageChatMessages').innerHTML = savedImageChat;
-      }
-      document.getElementById('imageChatMessages').scrollTop = document.getElementById('imageChatMessages').scrollHeight;
-
-      const savedTab = localStorage.getItem("xelo_active_tab") || "chatView";
-      const activeBtn = document.getElementById(`menu-${savedTab}`);
-      if (activeBtn) switchView(savedTab, activeBtn);
-
-      setupTextareaKeydown('userInput', sendMessage);
-      setupTextareaKeydown('imageInput', sendImageRequest);
-    });
-
-    function setupTextareaKeydown(id, submitFunction) {
-      const textarea = document.getElementById(id);
-      textarea.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          submitFunction();
-        }
-        setTimeout(() => autoResizeTextarea(textarea), 10);
-      });
-      textarea.addEventListener('input', function() {
-        autoResizeTextarea(this);
-      });
-    }
-
-    function autoResizeTextarea(textarea) {
-      textarea.style.height = 'auto';
-      textarea.style.height = (textarea.scrollHeight) + 'px';
-    }
-
-    function clearHistory() {
-      if (confirm("Czy na pewno chcesz wyczyścić całą historię czatów?")) {
-        localStorage.removeItem("xelo_chat_history");
-        localStorage.removeItem("xelo_image_chat_history");
-        document.getElementById('chatMessages').innerHTML = `<div class="message ai">${initialWelcomeMessage}</div>`;
-        document.getElementById('imageChatMessages').innerHTML = `<div class="message ai">Witaj w czacie graficznym! Opisz obraz, który chcesz stworzyć, a sztuczna inteligencja wygeneruje go i wklei do historii konwersacji.</div>`;
-      }
-    }
-
-    function parseMarkdown(text) {
-      let html = text;
-      html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-      html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
-      html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
-      html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
-      html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
-      html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-      html = html.replace(/\n/g, '<br>');
-      return html;
-    }
-
-    function switchView(viewId, buttonEl) {
-      document.querySelectorAll('.viewport-content').forEach(v => v.classList.remove('active'));
-      document.querySelectorAll('.menu-button').forEach(b => b.classList.remove('active'));
-      
-      const target = document.getElementById(viewId);
-      if (target) target.classList.add('active');
-      buttonEl.classList.add('active');
-      localStorage.setItem("xelo_active_tab", viewId);
-    }
-
-    async function sendMessage() {
-      const inputEl = document.getElementById('userInput');
-      const container = document.getElementById('chatMessages');
-      const text = inputEl.value.trim();
-      if (!text) return;
-
-      const userDiv = document.createElement('div');
-      userDiv.className = 'message user';
-      userDiv.textContent = text;
-      container.appendChild(userDiv);
-      
-      inputEl.value = '';
-      inputEl.style.height = '50px';
-
-      const aiDiv = document.createElement('div');
-      aiDiv.className = 'message ai';
-      aiDiv.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
-      container.appendChild(aiDiv);
-      container.scrollTop = container.scrollHeight;
-
-      try {
-        const response = await fetch(serverUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'text', prompt: text })
-        });
-        const replyText = await response.text();
-        
-        aiDiv.innerHTML = parseMarkdown(replyText);
-        localStorage.setItem("xelo_chat_history", container.innerHTML);
-      } catch (error) {
-        aiDiv.textContent = 'Błąd połączenia z serwerem. Spróbuj ponownie.';
-      }
-      container.scrollTop = container.scrollHeight;
-    }
-
-    async function sendImageRequest() {
-      const inputEl = document.getElementById('imageInput');
-      const container = document.getElementById('imageChatMessages');
-      const prompt = inputEl.value.trim();
-      if (!prompt) return;
-
-      const btn = document.getElementById('imageSendBtn');
-
-      const userDiv = document.createElement('div');
-      userDiv.className = 'message user';
-      userDiv.textContent = prompt;
-      container.appendChild(userDiv);
-      
-      inputEl.value = '';
-      inputEl.style.height = '50px';
-
-      const aiDiv = document.createElement('div');
-      aiDiv.className = 'message ai';
-      aiDiv.innerHTML = `<div style="margin-bottom: 8px;">🎨 Generowanie obrazu graficznego...</div><div class="typing-indicator"><span></span><span></span><span></span></div>`;
-      container.appendChild(aiDiv);
-      container.scrollTop = container.scrollHeight;
-
-      btn.disabled = true;
-
-      try {
-        const response = await fetch(serverUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'image', prompt: prompt })
-        });
-
-        if (!response.ok) throw new Error();
-
-        const imageUrl = await response.text();
-
-        aiDiv.innerHTML = `<div style="margin-bottom: 8px;">Oto Twój wygenerowany obraz:</div><img class="ai-generated-image" src="${imageUrl}" alt="${prompt}">`;
-        localStorage.setItem("xelo_image_chat_history", container.innerHTML);
-
-      } catch (error) {
-        aiDiv.innerHTML = `<span style="color: #ff7b72;">❌ Serwer nie wygenerował obrazu. Spróbuj ponownie za chwilę.</span>`;
-      } finally {
-        btn.disabled = false;
-        container.scrollTop = container.scrollHeight;
-      }
-    }
-  </script>
-</body>
-</html>
+            <textarea
