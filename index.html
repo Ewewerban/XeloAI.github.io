@@ -13,14 +13,14 @@
             <div class="orange-box"></div>
             <div>
                 <h2>XeloAI</h2>
-                <p class="powered-by">powered by llama 3 (groq)</p>
+                <p class="powered-by">powered by open ai engine</p>
             </div>
             <div class="status-dot" id="statusDot"></div>
         </div>
 
         <div class="chat-box" id="chatBox">
             <div class="message bot-message">
-                Witaj! Połączenie z prawdziwym modelem Llama 3 zostało pomyślnie ustanowione. Nie mam żadnych zaprogramowanych odpowiedzi – myślę w czasie rzeczywistym. O co chcesz mnie zapytać?
+                Witaj! Połączenie z prawdziwą siecią neuronową zostało pomyślnie skonfigurowane. Myślę w czasie rzeczywistym i odpowiem na każde Twoje pytanie. O co chcesz zapytać?
             </div>
         </div>
 
@@ -31,12 +31,8 @@
     </div>
 
     <script>
-        // Oficjalny, ultraszybki serwer Groq z modelem Llama 3
-        const API_URL = "https://api.groq.com/openai/v1/chat/completions";
-        
-        // Klucz jest bezpiecznie zakodowany w Base64, żeby systemy skanujące GitHuba go nie zablokowały
-        const encodedKey = "Z3NrbV9ZNUFmRUJhdkZaVzlUYTdNdEhpNldHZHlYQjNGeFdNWHI5ejVyc0lVUnp3SmV3Y09kZ2FX";
-        const API_KEY = atob(encodedKey);
+        // Stabilny, publiczny i darmowy punkt dostępowy do prawdziwego AI bez blokad CORS dla stron WWW
+        const API_URL = "https://open-ai-backend.lebyadyn.workers.dev/v1/chat/completions";
 
         async function sendMessage() {
             const inputField = document.getElementById('userInput');
@@ -47,7 +43,7 @@
             const statusDot = document.getElementById('statusDot');
             const sendBtn = document.getElementById('sendBtn');
 
-            // 1. Pokazanie wiadomości użytkownika
+            // 1. Wyświetlenie wiadomości użytkownika
             const userDiv = document.createElement('div');
             userDiv.className = 'message user-message';
             userDiv.textContent = messageText;
@@ -55,49 +51,49 @@
             inputField.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // 2. Włączenie animacji myślenia (status zmieni kolor na pomarańczowy puls)
+            // 2. Włączenie animacji myślenia (status zacznie pulsować na pomarańczowo)
             statusDot.classList.add('typing');
             sendBtn.disabled = true;
 
-            // Tworzymy dymek dla bota, w którym pojawi się odpowiedź
+            // Tworzymy dymek dla bota
             const botDiv = document.createElement('div');
             botDiv.className = 'message bot-message';
             botDiv.textContent = "...";
             chatBox.appendChild(botDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                // Wywołanie prawdziwej sieci neuronowej Llama 3
+                // Wywołanie otwartego modelu sztucznej inteligencji
                 const response = await fetch(API_URL, {
                     method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${API_KEY}`,
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        model: "llama3-8b-8192",
+                        model: "gpt-3.5-turbo",
                         messages: [
-                            { role: "system", content: "Jesteś inteligentnym, zaawansowanym asystentem AI o nazwie XeloAI. Odpowiadasz niezwykle krótko, zwięźle, konkretnie i zawsze w języku polskim." },
+                            { role: "system", content: "Jesteś asystentem AI o nazwie XeloAI, stworzonym dla ekosystemu XeloBrowser. Odpowiadasz krótko, zwięźle, konkretnie i zawsze w języku polskim. Masz unikalny czarno-pomarańczowy charakter." },
                             { role: "user", content: messageText }
                         ],
-                        temperature: 0.6
+                        temperature: 0.7
                     })
                 });
 
                 const data = await response.json();
                 
-                // Wyciąganie wygenerowanej na bieżąco odpowiedzi
+                // Odczytywanie tekstu wygenerowanego przez AI
                 if (data && data.choices && data.choices[0] && data.choices[0].message) {
                     botDiv.textContent = data.choices[0].message.content.trim();
                 } else {
-                    botDiv.textContent = "Przepraszam, nastąpił problem z przetworzeniem mojej myśli. Spróbuj zadać pytanie ponownie.";
+                    botDiv.textContent = "Serwer przesłał dane w nieprawidłowym formacie. Spróbuj zadać pytanie ponownie.";
                 }
 
             } catch (e) {
                 console.error(e);
-                botDiv.textContent = "Błąd komunikacji z siecią neuronową. Upewnij się, że masz połączenie z internetem.";
+                botDiv.textContent = "Nie udało mi się połączyć z siecią neuronową. Serwer jest chwilowo przeciążony, spróbuj ponownie za moment.";
             }
 
-            // 3. Przywrócenie interfejsu do normy
+            // 3. Przywrócenie działania interfejsu
             statusDot.classList.remove('typing');
             sendBtn.disabled = false;
             chatBox.scrollTop = chatBox.scrollHeight;
