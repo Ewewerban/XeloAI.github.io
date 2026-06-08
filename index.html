@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XeloAI Browser Ecosystem</title>
+  <title>XeloAI Workspace</title>
   <style>
     * {
       box-sizing: border-box;
@@ -17,12 +17,15 @@
       color: #f0f3f5;
       display: flex;
       height: 100vh;
+      max-height: 100vh;
       overflow: hidden;
     }
 
-    /* LEWY PASEK BOCZNY */
+    /* PASEK BOCZNY (STABILNY) */
     .sidebar-browser {
       width: 280px;
+      min-width: 280px;
+      max-width: 280px;
       background-color: #0d1117;
       border-right: 1px solid #21262d;
       display: flex;
@@ -60,6 +63,7 @@
       padding: 12px;
       gap: 6px;
       flex: 1;
+      overflow-y: auto;
     }
 
     .menu-button {
@@ -120,12 +124,15 @@
       border-color: #ff7b72;
     }
 
-    /* GŁÓWNY OBSZAR ROBOCZY (BEZ FEJKOWEGO PASKA ADRESU) */
+    /* GŁÓWNY PANEL ROBOCZY - CAŁKOWITY ZAKAZ ROZCIĄGANIA STRONY */
     .main-content-area {
       flex: 1;
       display: flex;
       flex-direction: column;
       background-color: #000000;
+      height: 100%;
+      max-height: 100%;
+      overflow: hidden;
       position: relative;
     }
 
@@ -133,20 +140,24 @@
       display: none;
       flex: 1;
       flex-direction: column;
-      overflow-y: auto;
+      height: 100%;
+      max-height: 100%;
+      overflow: hidden;
     }
 
     .viewport-content.active {
       display: flex;
     }
 
-    /* UNIWERSALNE STRUKTURY CZATÓW */
+    /* STRUKTURA CZATU */
     .chat-container {
       display: flex;
       flex-direction: column;
       height: 100%;
+      max-height: 100%;
     }
 
+    /* OKNO WIADOMOŚCI - NIEZALEŻNE PRZEWIJANIE DO GÓRY I DO DOŁU */
     .chat-messages {
       flex: 1;
       padding: 30px;
@@ -173,12 +184,11 @@
     }
 
     .message.user {
-      background-color: #f7781e;
+      background-color: #f7781e; /* Oryginalny pomarańczowy */
       color: #ffffff;
       align-self: flex-end;
     }
 
-    /* Wygenerowany obraz wewnątrz czatu */
     .ai-generated-image {
       max-width: 100%;
       max-height: 450px;
@@ -188,7 +198,7 @@
       display: block;
     }
 
-    /* Dolne paski wpisywania */
+    /* STABILNY PANEL DOLNY Z TEXTAREA */
     .chat-input-area {
       padding: 20px 30px;
       background-color: #161b22;
@@ -197,13 +207,15 @@
 
     .input-wrapper {
       display: flex;
+      align-items: flex-end;
       gap: 12px;
       max-width: 1200px;
       margin: 0 auto;
       width: 100%;
     }
 
-    .chat-input-area input {
+    /* ELASTYCZNE POLE TEKSTOWE OBSŁUGUJĄCE SHIFT+ENTER */
+    .chat-input-area textarea {
       flex: 1;
       background-color: #0d1117;
       border: 1px solid #30363d;
@@ -212,9 +224,14 @@
       color: #f0f3f5;
       font-size: 15px;
       outline: none;
+      resize: none;
+      height: 50px;
+      max-height: 160px;
+      line-height: 1.4;
+      font-family: inherit;
     }
 
-    .chat-input-area input:focus {
+    .chat-input-area textarea:focus {
       border-color: #f7781e;
     }
 
@@ -227,6 +244,8 @@
       font-weight: 600;
       font-size: 15px;
       cursor: pointer;
+      height: 50px;
+      transition: background 0.2s;
     }
 
     .chat-input-area button:disabled {
@@ -235,12 +254,38 @@
       cursor: not-allowed;
     }
 
+    /* ANIMACJA PISANIA AI (TRZY PULSUJĄCE KROPKI) */
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 0;
+    }
+
+    .typing-indicator span {
+      width: 8px;
+      height: 8px;
+      background-color: #f7781e;
+      border-radius: 50%;
+      display: inline-block;
+      animation: bounce 1.4s infinite ease-in-out both;
+    }
+
+    .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+    .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1.0); }
+    }
+
     /* SYSTEM MODUŁÓW */
     .modules-container {
       padding: 40px;
       max-width: 1200px;
       width: 100%;
       margin: 0 auto;
+      overflow-y: auto;
     }
 
     .modules-title {
@@ -290,7 +335,7 @@
       color: #f7781e;
     }
 
-    /* PARSER MARKDOWN */
+    /* FORMATOWANIE MARKDOWN DLA ODPOWIEDZI AI */
     .message.ai h1, .message.ai h2, .message.ai h3 { color: #ffffff; margin-top: 12px; margin-bottom: 6px; font-weight: 600; }
     .message.ai code { background-color: #21262d; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #ff7b72; }
     .message.ai pre { background-color: #161b22; border: 1px solid #30363d; padding: 12px; border-radius: 6px; margin: 10px 0; overflow-x: auto; }
@@ -303,4 +348,249 @@
     <div class="sidebar-header">
       <span style="font-size: 22px;">⚙️</span>
       <div>
-        <h2>XeloBrowser
+        <h2>XeloAI</h2>
+        <span style="font-size: 11px; color: #8b949e; display: block;">Workspace v1.4</span>
+      </div>
+      <div class="status-dot"></div>
+    </div>
+
+    <div class="sidebar-menu">
+      <button id="menu-chatView" class="menu-button active" onclick="switchView('chatView', this)">🤖 Inteligentny Czat AI</button>
+      <button id="menu-imageView" class="menu-button" onclick="switchView('imageView', this)">🎨 Generator Obrazów AI</button>
+      <button id="menu-modulesView" class="menu-button" onclick="switchView('modulesView', this)">📦 Moduły Systemu</button>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="clear-btn" onclick="clearHistory()">🗑️ Wyczyść historię</button>
+    </div>
+  </div>
+
+  <div class="main-content-area">
+    
+    <div id="chatView" class="viewport-content active">
+      <div class="chat-container">
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-area">
+          <div class="input-wrapper">
+            <textarea id="userInput" placeholder="Zadaj pytanie sztucznej inteligencji... (Enter aby wysłać, Shift+Enter nowa linia)"></textarea>
+            <button id="sendBtn" onclick="sendMessage()">Wyślij</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="imageView" class="viewport-content">
+      <div class="chat-container">
+        <div class="chat-messages" id="imageChatMessages">
+          <div class="message ai">
+            Witaj w czacie graficznym! Opisz obraz, który chcesz stworzyć, a sztuczna inteligencja wygeneruje go i wklei do historii konwersacji.
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <div class="input-wrapper">
+            <textarea id="imageInput" placeholder="Opisz obraz... (Enter aby wygenerować, Shift+Enter nowa linia)"></textarea>
+            <button id="imageSendBtn" onclick="sendImageRequest()">Generuj</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="modulesView" class="viewport-content">
+      <div class="modules-container">
+        <h2 class="modules-title">Dostępne Moduły Systemowe</h2>
+        <div class="equal-grid">
+          <div class="equal-card">
+            <div>
+              <h3>🤖 Inteligentny Czat AI</h3>
+              <p>Zintegrowany z silnikiem Gemini 2.5 Flash. Odpowiada błyskawicznie na pytania programistyczne i ogólne.</p>
+            </div>
+            <span class="status-badge">STATUS: AKTYWNY</span>
+          </div>
+          <div class="equal-card">
+            <div>
+              <h3>🎨 Generator Obrazów</h3>
+              <p>Autonomiczny kreator graficzny zasilany architekturą Flux. Generuje obrazy bezpośrednio jako linki do okna czatu.</p>
+            </div>
+            <span class="status-badge">STATUS: AKTYWNY</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const serverUrl = 'https://ewewerbanEwewerban--60e9fcc8633011f1b4d31607ee4eb77e.web.val.run';
+    const initialWelcomeMessage = `Witaj w panelu Xelo AI! Silnik został zaktualizowany do stabilnej architektury Gemini 2.5 Flash. W czym mogę pomóc?`;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Ładowanie historii tekstowej
+      const savedChat = localStorage.getItem("xelo_chat_history");
+      const container = document.getElementById('chatMessages');
+      container.innerHTML = savedChat ? savedChat : `<div class="message ai">${initialWelcomeMessage}</div>`;
+      container.scrollTop = container.scrollHeight;
+
+      // Ładowanie historii graficznej
+      const savedImageChat = localStorage.getItem("xelo_image_chat_history");
+      if (savedImageChat) {
+        document.getElementById('imageChatMessages').innerHTML = savedImageChat;
+      }
+      document.getElementById('imageChatMessages').scrollTop = document.getElementById('imageChatMessages').scrollHeight;
+
+      // Przywracanie aktywnej zakładki
+      const savedTab = localStorage.getItem("xelo_active_tab") || "chatView";
+      const activeBtn = document.getElementById(`menu-${savedTab}`);
+      if (activeBtn) switchView(savedTab, activeBtn);
+
+      // Spięcie obsługi wielowierszowej (Shift+Enter / Enter) dla pól textarea
+      setupTextareaKeydown('userInput', sendMessage);
+      setupTextareaKeydown('imageInput', sendImageRequest);
+    });
+
+    // Funkcja zarządzająca zachowaniem klawiszy Enter i Shift+Enter
+    function setupTextareaKeydown(id, submitFunction) {
+      const textarea = document.getElementById(id);
+      textarea.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault(); // Blokada nowej linii
+          submitFunction();   // Wysyłanie formularza
+        }
+        // Jeśli kliknięto Shift + Enter, pozwalamy przeglądarce zrobić nową linię
+        setTimeout(() => autoResizeTextarea(textarea), 10);
+      });
+      textarea.addEventListener('input', function() {
+        autoResizeTextarea(this);
+      });
+    }
+
+    // Automatyczne dopasowywanie wysokości pola tekstowego do zawartości
+    function autoResizeTextarea(textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = (textarea.scrollHeight) + 'px';
+    }
+
+    function clearHistory() {
+      if (confirm("Czy na pewno chcesz wyczyścić całą historię czatów?")) {
+        localStorage.removeItem("xelo_chat_history");
+        localStorage.removeItem("xelo_image_chat_history");
+        document.getElementById('chatMessages').innerHTML = `<div class="message ai">${initialWelcomeMessage}</div>`;
+        document.getElementById('imageChatMessages').innerHTML = `<div class="message ai">Witaj w czacie graficznym! Opisz obraz, który chcesz stworzyć, a sztuczna inteligencja wygeneruje go i wklei do historii konwersacji.</div>`;
+      }
+    }
+
+    function parseMarkdown(text) {
+      let html = text;
+      html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+      html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+      html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+      html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+      html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+      html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/\n/g, '<br>');
+      return html;
+    }
+
+    function switchView(viewId, buttonEl) {
+      document.querySelectorAll('.viewport-content').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.menu-button').forEach(b => b.classList.remove('active'));
+      
+      const target = document.getElementById(viewId);
+      if (target) target.classList.add('active');
+      buttonEl.classList.add('active');
+      localStorage.setItem("xelo_active_tab", viewId);
+    }
+
+    // OBSŁUGA CZATU TEKSTOWEGO (Z animacją pisania kropek)
+    async function sendMessage() {
+      const inputEl = document.getElementById('userInput');
+      const container = document.getElementById('chatMessages');
+      const text = inputEl.value.trim();
+      if (!text) return;
+
+      // Dodanie wiadomości użytkownika
+      const userDiv = document.createElement('div');
+      userDiv.className = 'message user';
+      userDiv.textContent = text;
+      container.appendChild(userDiv);
+      
+      // Reset pola textarea do bazowej wysokości
+      inputEl.value = '';
+      inputEl.style.height = '50px';
+
+      // Dodanie animacji pisania AI
+      const aiDiv = document.createElement('div');
+      aiDiv.className = 'message ai';
+      aiDiv.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
+      container.appendChild(aiDiv);
+      container.scrollTop = container.scrollHeight;
+
+      try {
+        const response = await fetch(serverUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'text', prompt: text })
+        });
+        const replyText = await response.text();
+        
+        // Zastąpienie animacji gotowym tekstem od AI
+        aiDiv.innerHTML = parseMarkdown(replyText);
+        localStorage.setItem("xelo_chat_history", container.innerHTML);
+      } catch (error) {
+        aiDiv.textContent = 'Błąd połączenia z serwerem. Spróbuj ponownie.';
+      }
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // OBSŁUGA CZATU GRAFICZNEGO (Z animacją pisania kropek)
+    async function sendImageRequest() {
+      const inputEl = document.getElementById('imageInput');
+      const container = document.getElementById('imageChatMessages');
+      const prompt = inputEl.value.trim();
+      if (!prompt) return;
+
+      const btn = document.getElementById('imageSendBtn');
+
+      // Dodanie wiadomości użytkownika
+      const userDiv = document.createElement('div');
+      userDiv.className = 'message user';
+      userDiv.textContent = prompt;
+      container.appendChild(userDiv);
+      
+      inputEl.value = '';
+      inputEl.style.height = '50px';
+
+      // Dodanie animacji oczekiwania
+      const aiDiv = document.createElement('div');
+      aiDiv.className = 'message ai';
+      aiDiv.innerHTML = `<div style="margin-bottom: 8px;">🎨 Generowanie obrazu graficznego...</div><div class="typing-indicator"><span></span><span></span><span></span></div>`;
+      container.appendChild(aiDiv);
+      container.scrollTop = container.scrollHeight;
+
+      btn.disabled = true;
+
+      try {
+        const response = await fetch(serverUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'image', prompt: prompt })
+        });
+
+        if (!response.ok) throw new Error();
+
+        // Odbieramy czysty, wygenerowany link tekstowy URL z Val Town
+        const imageUrl = await response.text();
+
+        // Wklejamy go jako źródło tagu img
+        aiDiv.innerHTML = `<div style="margin-bottom: 8px;">Oto Twój wygenerowany obraz:</div><img class="ai-generated-image" src="${imageUrl}" alt="${prompt}">`;
+        localStorage.setItem("xelo_image_chat_history", container.innerHTML);
+
+      } catch (error) {
+        aiDiv.innerHTML = `<span style="color: #ff7b72;">❌ Serwer nie wygenerował obrazu. Spróbuj ponownie za chwilę.</span>`;
+      } finally {
+        btn.disabled = false;
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+  </script>
+</body>
+</html>
