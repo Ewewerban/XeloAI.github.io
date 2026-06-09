@@ -32,17 +32,29 @@
     .message { max-width: 75%; padding: 16px 20px; border-radius: 12px; font-size: 15px; line-height: 1.6; word-wrap: break-word; }
     .message.ai { background-color: #0d1117; color: #e6edf3; align-self: flex-start; border: 1px solid #21262d; }
     .message.user { background-color: #f7781e; color: #ffffff; align-self: flex-end; }
+    .chat-attached-img { max-width: 100%; max-height: 200px; border-radius: 6px; display: block; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1); }
     .ai-generated-image { max-width: 100%; max-height: 450px; border-radius: 8px; margin-top: 12px; border: 1px solid #30363d; display: block; }
     
-    /* INPUTY */
-    .chat-input-area { padding: 20px 30px; background-color: #161b22; border-top: 1px solid #21262d; }
+    /* INTERFEJS INPUTÓW Z OBSŁUGĄ PLIKÓW */
+    .chat-input-area { padding: 15px 30px 20px 30px; background-color: #161b22; border-top: 1px solid #21262d; display: flex; flex-direction: column; gap: 10px; }
+    
+    /* Kontener podglądu wybranego pliku graficznego */
+    .upload-preview-container { display: none; align-items: center; gap: 10px; background-color: #0d1117; padding: 8px 12px; border-radius: 6px; border: 1px solid #30363d; width: fit-content; max-width: 300px; }
+    .upload-preview-img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #21262d; }
+    .upload-preview-name { font-size: 12px; color: #8b949e; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+    .upload-preview-remove { background: none; border: none; color: #ff7b72; font-size: 16px; cursor: pointer; padding: 0 4px; }
+    
     .input-wrapper { display: flex; gap: 12px; max-width: 1200px; margin: 0 auto; width: 100%; align-items: flex-end; }
     .chat-input-area textarea { flex: 1; background-color: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 14px; color: #f0f3f5; font-size: 15px; outline: none; resize: none; height: 50px; line-height: 1.4; }
     .chat-input-area textarea:focus { border-color: #f7781e; }
-    .chat-input-area button { background-color: #f7781e; color: white; border: none; border-radius: 8px; padding: 0 24px; font-weight: bold; cursor: pointer; height: 50px; }
+    
+    /* Przyciski */
+    .file-upload-label { background-color: #21262d; color: #c9d1d9; border: 1px solid #30363d; border-radius: 8px; padding: 0 16px; cursor: pointer; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 20px; transition: 0.2s; }
+    .file-upload-label:hover { background-color: #30363d; color: #ffffff; }
+    .chat-input-area button.send-btn { background-color: #f7781e; color: white; border: none; border-radius: 8px; padding: 0 24px; font-weight: bold; cursor: pointer; height: 50px; }
     .chat-input-area button:disabled { background-color: #30363d; color: #8b949e; cursor: not-allowed; }
     
-    /* MARKDOWN STYLE */
+    /* STYLE FORMATOWANIA MARKDOWN */
     .message.ai h1, .message.ai h2, .message.ai h3 { color: #ffffff; margin: 10px 0 6px 0; }
     .message.ai code { background-color: #21262d; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #ff7b72; }
     .message.ai pre { background-color: #161b22; border: 1px solid #30363d; padding: 12px; border-radius: 6px; margin: 10px 0; overflow-x: auto; }
@@ -60,7 +72,7 @@
       <span style="font-size: 22px;">⚙️</span>
       <div>
         <h2>XeloAI</h2>
-        <span style="font-size: 11px; color: #8b949e;">Workspace v2.2</span>
+        <span style="font-size: 11px; color: #8b949e;">Workspace v2.5</span>
       </div>
       <div class="status-dot"></div>
     </div>
@@ -77,11 +89,18 @@
   <div class="main-content-area">
     <div id="chatView" class="viewport-content active">
       <div class="chat-container">
-        <div class="chat-messages" id="chatMessages"><div class="message ai">Witaj w XeloAI! Jak mogę Ci dzisiaj pomóc? Rozmawiamy w formacie Markdown.</div></div>
+        <div class="chat-messages" id="chatMessages"><div class="message ai">Witaj w XeloAI! Możesz teraz pisać ze mną, a także przesyłać mi zdjęcia do analizy za pomocą ikony spinacza 📎.</div></div>
         <div class="chat-input-area">
+          <div class="upload-preview-container" id="previewContainer">
+            <img src="" class="upload-preview-img" id="previewImg">
+            <span class="upload-preview-name" id="previewName">plik.png</span>
+            <button class="upload-preview-remove" onclick="removeAttachedFile()">✕</button>
+          </div>
           <div class="input-wrapper">
-            <textarea id="userInput" placeholder="Zadaj pytanie... (Enter wysyła, Shift+Enter nowa linia)"></textarea>
-            <button onclick="sendMessage()">Wyślij</button>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(this)">
+            <label for="fileInput" class="file-upload-label" title="Załącz obraz">📎</label>
+            <textarea id="userInput" placeholder="Zadaj pytanie lub opisz zdjęcie... (Enter wysyła)"></textarea>
+            <button class="send-btn" onclick="sendMessage()">Wyślij</button>
           </div>
         </div>
       </div>
@@ -89,11 +108,11 @@
 
     <div id="imageView" class="viewport-content">
       <div class="chat-container">
-        <div class="chat-messages" id="imageChatMessages"><div class="message ai">Wpisz opis, aby wygenerować obraz przy użyciu zaawansowanego modelu **Flux AI**.</div></div>
+        <div class="chat-messages" id="imageChatMessages"><div class="message ai">Wpisz opis, aby wygenerować obraz przy użyciu silnika **Flux AI**.</div></div>
         <div class="chat-input-area">
           <div class="input-wrapper">
-            <textarea id="imageInput" placeholder="Opisz obraz... (Enter generuje, Shift+Enter nowa linia)"></textarea>
-            <button id="imageSendBtn" onclick="sendImageRequest()">Generuj</button>
+            <textarea id="imageInput" placeholder="Opisz obraz... (Enter generuje)"></textarea>
+            <button id="imageSendBtn" class="send-btn" onclick="sendImageRequest()">Generuj</button>
           </div>
         </div>
       </div>
@@ -103,7 +122,7 @@
       <div class="modules-container">
         <h2 style="margin-bottom:20px;">Moduły Systemu</h2>
         <div class="equal-grid">
-          <div class="equal-card"><h3>🤖 Silnik Tekstowy</h3><p>Aktywny (Gemini 2.5 Flash)</p></div>
+          <div class="equal-card"><h3>🤖 Silnik Multimodalny</h3><p>Aktywny (Gemini 2.5 Flash)</p></div>
           <div class="equal-card"><h3>🎨 Silnik Graficzny</h3><p>Aktywny (Flux Engine AI)</p></div>
         </div>
       </div>
@@ -111,8 +130,8 @@
   </div>
 
   <script>
-    // Połączono prawidłowo z Twoim serwerem Val Town
     const serverUrl = 'https://ewewerbanEwewerban--60e9fcc8633011f1b4d31607ee4eb77e.web.val.run';
+    let attachedImageBase64 = null;
 
     function switchView(viewId, btn) {
       document.querySelectorAll('.viewport-content').forEach(v => v.classList.remove('active'));
@@ -122,13 +141,33 @@
     }
 
     function clearHistory() {
-      localStorage.removeItem("xelo_chat_html_v22");
-      localStorage.removeItem("xelo_image_html_v22");
-      document.getElementById('chatMessages').innerHTML = '<div class="message ai">Witaj w XeloAI! Jak mogę Ci dzisiaj pomóc?</div>';
-      document.getElementById('imageChatMessages').innerHTML = '<div class="message ai">Wpisz opis, aby wygenerować obraz przy użyciu zaawansowanego modelu **Flux AI**.</div>';
+      localStorage.removeItem("xelo_chat_html_v25");
+      localStorage.removeItem("xelo_image_html_v25");
+      document.getElementById('chatMessages').innerHTML = '<div class="message ai">Witaj w XeloAI! Prześlij mi zdjęcie 📎 lub zadaj pytanie.</div>';
+      document.getElementById('imageChatMessages').innerHTML = '<div class="message ai">Wpisz opis, aby wygenerować obraz przy użyciu silnika **Flux AI**.</div>';
     }
 
-    // Funkcja parsująca Markdown
+    // Wybór pliku z dysku i zamiana na Base64
+    function handleFileSelect(input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        attachedImageBase64 = e.target.result;
+        document.getElementById('previewImg').src = attachedImageBase64;
+        document.getElementById('previewName').textContent = file.name;
+        document.getElementById('previewContainer').style.display = 'flex';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeAttachedFile() {
+      attachedImageBase64 = null;
+      document.getElementById('fileInput').value = '';
+      document.getElementById('previewContainer').style.display = 'none';
+    }
+
     function parseMarkdown(text) {
       let html = text;
       html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
@@ -141,10 +180,9 @@
       return html;
     }
 
-    // Ładowanie historii i podpięcie obsługi klawiszy (Enter / Shift+Enter)
     document.addEventListener("DOMContentLoaded", () => {
-      if(localStorage.getItem("xelo_chat_html_v22")) document.getElementById('chatMessages').innerHTML = localStorage.getItem("xelo_chat_html_v22");
-      if(localStorage.getItem("xelo_image_html_v22")) document.getElementById('imageChatMessages').innerHTML = localStorage.getItem("xelo_image_html_v22");
+      if(localStorage.getItem("xelo_chat_html_v25")) document.getElementById('chatMessages').innerHTML = localStorage.getItem("xelo_chat_html_v25");
+      if(localStorage.getItem("xelo_image_html_v25")) document.getElementById('imageChatMessages').innerHTML = localStorage.getItem("xelo_image_html_v25");
 
       setupTextarea('userInput', sendMessage);
       setupTextarea('imageInput', sendImageRequest);
@@ -160,19 +198,32 @@
       });
     }
 
-    // WYSYŁANIE TEKSTU (Z MARKDOWNEM)
+    // WYSYŁANIE TEKSTU I OBRAZÓW DO GEMINI
     async function sendMessage() {
       const input = document.getElementById('userInput');
       const text = input.value.trim();
-      if(!text) return;
+      
+      if(!text && !attachedImageBase64) return;
 
       const container = document.getElementById('chatMessages');
-      container.innerHTML += `<div class="message user">${text}</div>`;
+      let userMsgHtml = `<div class="message user">`;
+      
+      // Jeśli dołączono zdjęcie, wklejamy je do okienka wiadomości użytkownika
+      if (attachedImageBase64) {
+        userMsgHtml += `<img src="${attachedImageBase64}" class="chat-attached-img">`;
+      }
+      userMsgHtml += `${text || "<i>Analiza przesłanego obrazu</i>"}</div>`;
+      
+      container.innerHTML += userMsgHtml;
+      
+      // Kopia zmiennej do wysłania i czyszczenie stanu uploadu
+      const imageToSend = attachedImageBase64;
       input.value = '';
+      removeAttachedFile();
 
       const aiDiv = document.createElement('div');
       aiDiv.className = 'message ai';
-      aiDiv.textContent = 'Generowanie odpowiedzi...';
+      aiDiv.textContent = 'Trwa analizowanie danych przez AI...';
       container.appendChild(aiDiv);
       container.scrollTop = container.scrollHeight;
 
@@ -180,18 +231,18 @@
         const r = await fetch(serverUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'text', prompt: text })
+          body: JSON.stringify({ type: 'text', prompt: text || "Przeanalizuj dokładnie ten obraz.", image: imageToSend })
         });
         const reply = await r.text();
         aiDiv.innerHTML = parseMarkdown(reply);
-        localStorage.setItem("xelo_chat_html_v22", container.innerHTML);
+        localStorage.setItem("xelo_chat_html_v25", container.innerHTML);
       } catch(e) {
         aiDiv.textContent = 'Błąd połączenia z serwerem.';
       }
       container.scrollTop = container.scrollHeight;
     }
 
-    // GENEROWANIE OBRAZU (FLUX AI)
+    // GENEROWANIE GRAPHIC FLUX
     async function sendImageRequest() {
       const input = document.getElementById('imageInput');
       const promptText = input.value.trim();
@@ -219,7 +270,7 @@
         
         const imageUrl = await r.text();
         aiDiv.innerHTML = `<div>Oto Twój obraz (Flux AI):</div><img class="ai-generated-image" src="${imageUrl.trim()}" alt="Flux Image">`;
-        localStorage.setItem("xelo_image_html_v22", container.innerHTML);
+        localStorage.setItem("xelo_image_html_v25", container.innerHTML);
       } catch(e) {
         aiDiv.textContent = 'Nie udało się wygenerować grafiki Flux.';
       } finally {
