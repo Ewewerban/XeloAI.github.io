@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XeloAI</title>
+  <title>XeloAI Workspace</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
     body { background-color: #000000; color: #f0f3f5; display: flex; height: 100vh; overflow: hidden; }
-    .sidebar-browser { width: 280px; background-color: #0d1117; border-right: 1px solid #21262d; display: flex; flex-direction: column; }
+    
+    /* PASEK BOCZNY */
+    .sidebar-browser { width: 280px; min-width: 280px; background-color: #0d1117; border-right: 1px solid #21262d; display: flex; flex-direction: column; }
     .sidebar-header { padding: 16px; background-color: #161b22; border-bottom: 1px solid #21262d; display: flex; align-items: center; gap: 12px; }
     .sidebar-header h2 { font-size: 18px; color: #ffffff; }
     .status-dot { width: 8px; height: 8px; background-color: #2ea44f; border-radius: 50%; margin-left: auto; }
@@ -18,20 +20,34 @@
     .sidebar-footer { padding: 12px; border-top: 1px solid #21262d; }
     .clear-btn { background-color: #21262d; color: #ff7b72; border: 1px solid #30363d; padding: 10px; width: 100%; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; }
     .clear-btn:hover { background-color: #8c2323; color: white; }
+    
+    /* OBSZAR ROBOCZY */
     .main-content-area { flex: 1; display: flex; flex-direction: column; background-color: #000000; height: 100%; overflow: hidden; }
     .viewport-content { display: none; flex: 1; flex-direction: column; height: 100%; overflow: hidden; }
     .viewport-content.active { display: flex; }
     .chat-container { display: flex; flex-direction: column; height: 100%; }
     .chat-messages { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
-    .message { max-width: 75%; padding: 16px 20px; border-radius: 12px; font-size: 15px; line-height: 1.6; }
+    
+    /* WIADOMOŚCI */
+    .message { max-width: 75%; padding: 16px 20px; border-radius: 12px; font-size: 15px; line-height: 1.6; word-wrap: break-word; }
     .message.ai { background-color: #0d1117; color: #e6edf3; align-self: flex-start; border: 1px solid #21262d; }
     .message.user { background-color: #f7781e; color: #ffffff; align-self: flex-end; }
-    .ai-generated-image { max-width: 100%; max-height: 400px; border-radius: 8px; margin-top: 10px; border: 1px solid #30363d; display: block; }
+    .ai-generated-image { max-width: 100%; max-height: 450px; border-radius: 8px; margin-top: 12px; border: 1px solid #30363d; display: block; }
+    
+    /* INPUTY */
     .chat-input-area { padding: 20px 30px; background-color: #161b22; border-top: 1px solid #21262d; }
-    .input-wrapper { display: flex; gap: 12px; max-width: 1200px; margin: 0 auto; width: 100%; }
-    .chat-input-area textarea { flex: 1; background-color: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 14px; color: #f0f3f5; font-size: 15px; outline: none; resize: none; height: 50px; }
+    .input-wrapper { display: flex; gap: 12px; max-width: 1200px; margin: 0 auto; width: 100%; align-items: flex-end; }
+    .chat-input-area textarea { flex: 1; background-color: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 14px; color: #f0f3f5; font-size: 15px; outline: none; resize: none; height: 50px; line-height: 1.4; }
+    .chat-input-area textarea:focus { border-color: #f7781e; }
     .chat-input-area button { background-color: #f7781e; color: white; border: none; border-radius: 8px; padding: 0 24px; font-weight: bold; cursor: pointer; height: 50px; }
     .chat-input-area button:disabled { background-color: #30363d; color: #8b949e; cursor: not-allowed; }
+    
+    /* MARKDOWN STYLE */
+    .message.ai h1, .message.ai h2, .message.ai h3 { color: #ffffff; margin: 10px 0 6px 0; }
+    .message.ai code { background-color: #21262d; padding: 2px 6px; border-radius: 4px; font-family: monospace; color: #ff7b72; }
+    .message.ai pre { background-color: #161b22; border: 1px solid #30363d; padding: 12px; border-radius: 6px; margin: 10px 0; overflow-x: auto; }
+    .message.ai pre code { background: none; padding: 0; color: #e6edf3; }
+    
     .modules-container { padding: 40px; }
     .equal-grid { display: flex; gap: 20px; }
     .equal-card { background-color: #0d1117; border: 1px solid #21262d; padding: 20px; border-radius: 8px; flex: 1; }
@@ -44,13 +60,13 @@
       <span style="font-size: 22px;">⚙️</span>
       <div>
         <h2>XeloAI</h2>
-        <span style="font-size: 11px; color: #8b949e;">Workspace v1.9</span>
+        <span style="font-size: 11px; color: #8b949e;">Workspace v2.2</span>
       </div>
       <div class="status-dot"></div>
     </div>
     <div class="sidebar-menu">
       <button class="menu-button active" onclick="switchView('chatView', this)">🤖 Inteligentny Czat AI</button>
-      <button class="menu-button" onclick="switchView('imageView', this)">🎨 Generator Obrazów AI</button>
+      <button class="menu-button" onclick="switchView('imageView', this)">🎨 Generator Flux AI</button>
       <button class="menu-button" onclick="switchView('modulesView', this)">📦 Moduły Systemu</button>
     </div>
     <div class="sidebar-footer">
@@ -61,10 +77,10 @@
   <div class="main-content-area">
     <div id="chatView" class="viewport-content active">
       <div class="chat-container">
-        <div class="chat-messages" id="chatMessages"><div class="message ai">Witaj w XeloAI! W czym mogę pomóc?</div></div>
+        <div class="chat-messages" id="chatMessages"><div class="message ai">Witaj w XeloAI! Jak mogę Ci dzisiaj pomóc? Rozmawiamy w formacie Markdown.</div></div>
         <div class="chat-input-area">
           <div class="input-wrapper">
-            <textarea id="userInput" placeholder="Zadaj pytanie..."></textarea>
+            <textarea id="userInput" placeholder="Zadaj pytanie... (Enter wysyła, Shift+Enter nowa linia)"></textarea>
             <button onclick="sendMessage()">Wyślij</button>
           </div>
         </div>
@@ -73,10 +89,10 @@
 
     <div id="imageView" class="viewport-content">
       <div class="chat-container">
-        <div class="chat-messages" id="imageChatMessages"><div class="message ai">Opisz obraz, który chcesz stworzyć...</div></div>
+        <div class="chat-messages" id="imageChatMessages"><div class="message ai">Wpisz opis, aby wygenerować obraz przy użyciu zaawansowanego modelu **Flux AI**.</div></div>
         <div class="chat-input-area">
           <div class="input-wrapper">
-            <textarea id="imageInput" placeholder="Opisz obraz (np. kot pijący kawę)..."></textarea>
+            <textarea id="imageInput" placeholder="Opisz obraz... (Enter generuje, Shift+Enter nowa linia)"></textarea>
             <button id="imageSendBtn" onclick="sendImageRequest()">Generuj</button>
           </div>
         </div>
@@ -87,14 +103,15 @@
       <div class="modules-container">
         <h2 style="margin-bottom:20px;">Moduły Systemu</h2>
         <div class="equal-grid">
-          <div class="equal-card"><h3>🤖 Czat</h3><p>Aktywny (Gemini 2.5 Flash)</p></div>
-          <div class="equal-card"><h3>🎨 Grafika</h3><p>Aktywny (Flux Engine)</p></div>
+          <div class="equal-card"><h3>🤖 Silnik Tekstowy</h3><p>Aktywny (Gemini 2.5 Flash)</p></div>
+          <div class="equal-card"><h3>🎨 Silnik Graficzny</h3><p>Aktywny (Flux Engine AI)</p></div>
         </div>
       </div>
     </div>
   </div>
 
   <script>
+    // Połączono prawidłowo z Twoim serwerem Val Town
     const serverUrl = 'https://ewewerbanEwewerban--60e9fcc8633011f1b4d31607ee4eb77e.web.val.run';
 
     function switchView(viewId, btn) {
@@ -105,17 +122,45 @@
     }
 
     function clearHistory() {
-      localStorage.removeItem("xelo_chat_html");
-      localStorage.removeItem("xelo_image_html");
-      document.getElementById('chatMessages').innerHTML = '<div class="message ai">Witaj w XeloAI! W czym mogę pomóc?</div>';
-      document.getElementById('imageChatMessages').innerHTML = '<div class="message ai">Opisz obraz, który chcesz stworzyć...</div>';
+      localStorage.removeItem("xelo_chat_html_v22");
+      localStorage.removeItem("xelo_image_html_v22");
+      document.getElementById('chatMessages').innerHTML = '<div class="message ai">Witaj w XeloAI! Jak mogę Ci dzisiaj pomóc?</div>';
+      document.getElementById('imageChatMessages').innerHTML = '<div class="message ai">Wpisz opis, aby wygenerować obraz przy użyciu zaawansowanego modelu **Flux AI**.</div>';
     }
 
-    // Ładowanie historii przy starcie
-    if(localStorage.getItem("xelo_chat_html")) document.getElementById('chatMessages').innerHTML = localStorage.getItem("xelo_chat_html");
-    if(localStorage.getItem("xelo_image_html")) document.getElementById('imageChatMessages').innerHTML = localStorage.getItem("xelo_image_html");
+    // Funkcja parsująca Markdown
+    function parseMarkdown(text) {
+      let html = text;
+      html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+      html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+      html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+      html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+      html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+      html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/\n/g, '<br>');
+      return html;
+    }
 
-    // WYSYŁANIE TEKSTU
+    // Ładowanie historii i podpięcie obsługi klawiszy (Enter / Shift+Enter)
+    document.addEventListener("DOMContentLoaded", () => {
+      if(localStorage.getItem("xelo_chat_html_v22")) document.getElementById('chatMessages').innerHTML = localStorage.getItem("xelo_chat_html_v22");
+      if(localStorage.getItem("xelo_image_html_v22")) document.getElementById('imageChatMessages').innerHTML = localStorage.getItem("xelo_image_html_v22");
+
+      setupTextarea('userInput', sendMessage);
+      setupTextarea('imageInput', sendImageRequest);
+    });
+
+    function setupTextarea(id, submitFunc) {
+      const el = document.getElementById(id);
+      el.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          submitFunc();
+        }
+      });
+    }
+
+    // WYSYŁANIE TEKSTU (Z MARKDOWNEM)
     async function sendMessage() {
       const input = document.getElementById('userInput');
       const text = input.value.trim();
@@ -137,15 +182,16 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ type: 'text', prompt: text })
         });
-        aiDiv.textContent = await r.text();
-        localStorage.setItem("xelo_chat_html", container.innerHTML);
+        const reply = await r.text();
+        aiDiv.innerHTML = parseMarkdown(reply);
+        localStorage.setItem("xelo_chat_html_v22", container.innerHTML);
       } catch(e) {
-        aiDiv.textContent = 'Błąd połączenia.';
+        aiDiv.textContent = 'Błąd połączenia z serwerem.';
       }
       container.scrollTop = container.scrollHeight;
     }
 
-    // GENEROWANIE OBRAZU — TU JEST PEŁNA NAPRAWA
+    // GENEROWANIE OBRAZU (FLUX AI)
     async function sendImageRequest() {
       const input = document.getElementById('imageInput');
       const promptText = input.value.trim();
@@ -160,7 +206,7 @@
 
       const aiDiv = document.createElement('div');
       aiDiv.className = 'message ai';
-      aiDiv.textContent = 'Trwa projektowanie grafiki przez AI...';
+      aiDiv.textContent = 'Trwa generowanie grafiki przez silnik Flux AI...';
       container.appendChild(aiDiv);
       container.scrollTop = container.scrollHeight;
 
@@ -172,12 +218,10 @@
         });
         
         const imageUrl = await r.text();
-        
-        // Wstrzykujemy czysty znacznik img z pobranym adresem URL obrazka
-        aiDiv.innerHTML = `<div>Oto Twój obraz:</div><img class="ai-generated-image" src="${imageUrl.trim()}" alt="AI Image">`;
-        localStorage.setItem("xelo_image_html", container.innerHTML);
+        aiDiv.innerHTML = `<div>Oto Twój obraz (Flux AI):</div><img class="ai-generated-image" src="${imageUrl.trim()}" alt="Flux Image">`;
+        localStorage.setItem("xelo_image_html_v22", container.innerHTML);
       } catch(e) {
-        aiDiv.textContent = 'Nie udało się wygenerować grafiki.';
+        aiDiv.textContent = 'Nie udało się wygenerować grafiki Flux.';
       } finally {
         btn.disabled = false;
         container.scrollTop = container.scrollHeight;
